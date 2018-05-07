@@ -69,7 +69,7 @@ norm: all
 test: all
 	@$(RM) -f ./test/test
 	@$(CC) $(CFLAGS) -L. -lft_malloc ./test/test.c -o ./test/test
-	@/usr/bin/time -v ./test/run.sh ./test/test
+	@/usr/bin/time -l ./test/run.sh ./test/test
 
 # lil memo
 # $@ = rule's name
