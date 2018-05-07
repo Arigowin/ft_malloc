@@ -9,7 +9,7 @@
 
 void		init_tiny(void)
 {
-	g_lst->size_tiny = sizeof(t_node) * TINY * getpagesize();
+	g_lst->size_tiny = sizeof(t_node) * TINY  * 100 * getpagesize();
 	g_lst->tiny = (t_node *)(g_lst + 1);
 	g_lst->tiny->end = g_lst->tiny + 2;
 	g_lst->tiny->next = NULL;
@@ -17,7 +17,7 @@ void		init_tiny(void)
 
 void		init_small(void)
 {
-	g_lst->size_small = sizeof(t_node) * SMALL * getpagesize();
+	g_lst->size_small = sizeof(t_node) * SMALL * 100 * getpagesize();
 	g_lst->small = (t_node *)((char *)g_lst->tiny + g_lst->size_tiny);
 	g_lst->small->end = g_lst->small + 1;
 	g_lst->small->next = NULL;
@@ -37,8 +37,8 @@ t_lst		*get_lst(void)
 		write(1, "Start2\n", 7);
 		if (NULL == (g_lst = mmap(NULL,
 						sizeof(t_lst)
-						+ sizeof(t_node) * getpagesize() * TINY
-						+ sizeof(t_node) * getpagesize() * SMALL,
+						+ sizeof(t_node) * 100 * getpagesize() * TINY
+						+ sizeof(t_node) * 100 * getpagesize() * SMALL,
 						PROT_READ | PROT_WRITE,
 						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 			return NULL; // error

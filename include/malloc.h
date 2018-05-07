@@ -3,7 +3,7 @@
 
 # include <stdlib.h>
 
-# define TINY 8
+# define TINY 16
 # define SMALL 32
 
 typedef struct		s_node

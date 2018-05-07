@@ -17,12 +17,17 @@ void		*add(t_node *node, size_t size, size_t max)
 	curr = node;
 	while(curr->next != NULL)
 	{
-		if ((size_t)((char *)curr->next - (char *)curr->end) >= size)
+		write(1, "While\n", 6);
+		if ((size_t)(char *)curr->next - (size_t)(char *)curr->end >= size)
+		{
+			write(1, "x\n", 2);
 			break;
+		}
 		curr = curr->next;
 	}
 	if (((char *)curr->end + size) > ((char *)node + max))
 	{
+		write(1, "y\n", 2);
 		return NULL;
 	}
 	tmp = curr->next;
