@@ -22,11 +22,12 @@ LNNAME = libft_malloc.so
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 
-CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -I $(LIBHPATH) -fPIC
+CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -I $(LIBHPATH) -fPIC -g
 LIBS = -L $(LIBPATH) -lft
 
 SRC = malloc.c \
-	  free.c
+	  free.c \
+	  lst.c
 
 
 .PHONY: all clean fclean re lib.fclean test
@@ -68,7 +69,7 @@ norm: all
 test: all
 	@$(RM) -f ./test/test
 	@$(CC) $(CFLAGS) -L. -lft_malloc ./test/test.c -o ./test/test
-	@./test/run.sh ./test/test
+	@/usr/bin/time -v ./test/run.sh ./test/test
 
 # lil memo
 # $@ = rule's name

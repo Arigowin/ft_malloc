@@ -2,18 +2,35 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// getrlimit
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <sys/types.h>
+
 int main(void)
 {
+	/* struct rlimit lim; */
 	write(1, "abc\n", 4);
 
-	int *tmp = (int *)malloc(8);
+	/* getrlimit(RLIMIT_MEMLOCK | RLIMIT_DATA, &lim); */
+	/* printf("%lu\n", lim.rlim_cur); */
+	/* printf("%lu\n", lim.rlim_max); */
+
+	/* printf("%d\n", getpagesize()); */
+
+	char *tmp = (char *)malloc(32 * 4096 + 1);
 	/* printf("%p\n", tmp); */
 
 	if (tmp == NULL)
 		return (-1);
 
-	*tmp = 42;
-	write(1, tmp, 1);
+	int i = 0;
+	while(i < 32 * 4096)
+	{
+		tmp[i] = '*';
+		i++;
+	}
+	tmp[32 * 4096] = '\0';
 	write(1, "\nDone\n", 5);
 	free(tmp);
 
