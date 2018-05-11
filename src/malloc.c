@@ -51,12 +51,12 @@ void		*malloc(size_t size)
 		return NULL;
 
 	len = size + sizeof(t_node);
-	if (len <= (size_t)(TINY * getpagesize()))
+	if (len <= get_lst()->size_tiny)
 	{
 		ft_putendl_fd("TINY\n", 2);
 		return add(get_lst()->tiny, len, get_lst()->size_tiny);
 	}
-	if (len <= (size_t)(SMALL * getpagesize()))
+	if (len <= get_lst()->size_small)
 	{
 		ft_putendl_fd("SMALL\n", 2);
 		return add(get_lst()->small, len, get_lst()->size_small);
