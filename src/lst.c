@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "malloc.h"
 
 // mmap
@@ -9,7 +10,7 @@
 
 void		init_tiny(void)
 {
-	g_lst->size_tiny = sizeof(t_node) * TINY  * 100 * getpagesize();
+	g_lst->size_tiny = sizeof(t_node) * TINY * getpagesize();
 	g_lst->tiny = (t_node *)(g_lst + 1);
 	g_lst->tiny->end = g_lst->tiny + 2;
 	g_lst->tiny->next = NULL;
@@ -17,7 +18,7 @@ void		init_tiny(void)
 
 void		init_small(void)
 {
-	g_lst->size_small = sizeof(t_node) * SMALL * 100 * getpagesize();
+	g_lst->size_small = sizeof(t_node) * SMALL * getpagesize();
 	g_lst->small = (t_node *)((char *)g_lst->tiny + g_lst->size_tiny);
 	g_lst->small->end = g_lst->small + 1;
 	g_lst->small->next = NULL;
@@ -34,7 +35,7 @@ t_lst		*get_lst(void)
 {
 	if (g_lst == NULL)
 	{
-		write(1, "Start2\n", 7);
+		ft_putendl_fd("Start2\n", 2);
 		if (NULL == (g_lst = mmap(NULL,
 						sizeof(t_lst)
 						+ sizeof(t_node) * 100 * getpagesize() * TINY
@@ -47,7 +48,7 @@ t_lst		*get_lst(void)
 		init_small();
 		init_large();
 
-		write(1, "End2\n", 5);
+		ft_putendl_fd("End2\n", 2);
 	}
 
 	return g_lst;

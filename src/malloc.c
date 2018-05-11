@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "malloc.h"
 
 // mmap
@@ -9,7 +10,7 @@
 
 void		*add(t_node *node, size_t size, size_t max)
 {
-	write(1, "Start1\n", 7);
+	ft_putendl_fd("Start1\n", 2);
 
 	t_node *curr;
 	t_node *tmp;
@@ -17,17 +18,17 @@ void		*add(t_node *node, size_t size, size_t max)
 	curr = node;
 	while(curr->next != NULL)
 	{
-		write(1, "While\n", 6);
+		ft_putendl_fd("While\n", 2);
 		if ((size_t)(char *)curr->next - (size_t)(char *)curr->end >= size)
 		{
-			write(1, "x\n", 2);
+			ft_putendl_fd("x\n", 2);
 			break;
 		}
 		curr = curr->next;
 	}
 	if (((char *)curr->end + size) > ((char *)node + max))
 	{
-		write(1, "y\n", 2);
+		ft_putendl_fd("y\n", 2);
 		return NULL;
 	}
 	tmp = curr->next;
@@ -35,7 +36,7 @@ void		*add(t_node *node, size_t size, size_t max)
 	curr->next->end = (t_node *)((char *)curr->next + size);
 	curr->next->next = tmp;
 
-	write(1, "End1\n", 5);
+	ft_putendl_fd("End1\n", 3);
 	return curr->next;
 }
 
@@ -45,7 +46,7 @@ void		*malloc(size_t size)
 	size_t		len;
 	t_node		*tmp;
 
-	write(1, "Start0\n", 7);
+	ft_putendl_fd("Start0\n", 2);
 
 	if (size <= 0)
 		return NULL;
@@ -53,16 +54,16 @@ void		*malloc(size_t size)
 	len = size + sizeof(t_node);
 	if (len <= (size_t)(TINY * getpagesize()))
 	{
-		write(1, "TINY\n", 5);
+		ft_putendl_fd("TINY\n", 2);
 		return add(get_lst()->tiny, len, get_lst()->size_tiny);
 	}
 	if (len <= (size_t)(SMALL * getpagesize()))
 	{
-		write(1, "SMALL\n", 6);
+		ft_putendl_fd("SMALL\n", 2);
 		return add(get_lst()->small, len, get_lst()->size_small);
 	}
 
-	write(1, "LARGE\n", 6);
+	ft_putendl_fd("LARGE\n", 2);
 	tmp = get_lst()->large;
 	while(tmp->next != NULL)
 		tmp = tmp->next;
@@ -74,7 +75,7 @@ void		*malloc(size_t size)
 	tmp->next->end = (t_node *)((char *)tmp->next + len);
 	tmp->next->next = NULL;
 
-	write(1, "End0\n", 5);
+	ft_putendl_fd("End0\n", 2);
 
 	return (void*)(tmp->next + 1);
 }
