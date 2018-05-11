@@ -9,27 +9,24 @@
 
 void		init_tiny(void)
 {
-	g_lst->size_tiny = sizeof(t_node) * TINY  * 100 * getpagesize();
+	g_lst->size_tiny = sizeof(t_node) * TINY  * getpagesize();
 	g_lst->tiny = (t_node *)(g_lst + 1);
-	g_lst->tiny->size = sizeof(t_node) * TINY * getpagesize();
-	g_lst->tiny->is_free = 1;
+	g_lst->tiny->end = g_lst->tiny + 2;
 	g_lst->tiny->next = NULL;
 }
 
 void		init_small(void)
 {
-	g_lst->size_small = sizeof(t_node) * SMALL * 100 * getpagesize();
+	g_lst->size_small = sizeof(t_node) * SMALL * getpagesize();
 	g_lst->small = (t_node *)((char *)g_lst->tiny + g_lst->size_tiny);
-	g_lst->small->size = sizeof(t_node) * SMALL * getpagesize();
-	g_lst->small->is_free = 1;
+	g_lst->small->end = g_lst->small + 1;
 	g_lst->small->next = NULL;
 }
 
 void		init_large(void)
 {
 	g_lst->large = (t_node *)(g_lst->tiny + 1);
-	g_lst->small->size = sizeof(t_node) * SMALL * TINY * getpagesize();
-	g_lst->small->is_free = 1;
+	g_lst->large->end = g_lst->large + 1;
 	g_lst->large->next = NULL;
 }
 

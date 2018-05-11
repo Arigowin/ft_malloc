@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "malloc.h"
 
 // munmap
@@ -12,14 +13,14 @@
 int			remove_ptr(void *ptr, t_node *node)
 {
 	int i =0;
-	write(1, "SFree1\n", 7);
+	ft_putendl_fd("SFree1\n", 2);
 
 	while(node->next != NULL)
 	{
 		if (ptr == node->next)
 		{
 			node->next = node->next->next;
-			write(1, "EFree2\n", 7);
+			ft_putendl_fd("EFree2\n", 2);
 			return (1);
 		}
 		/* printf("-> %p %p\n", (char *)node->next->end, (char *)ptr); */
@@ -29,7 +30,7 @@ int			remove_ptr(void *ptr, t_node *node)
 		if (i == 10)
 			return (1);
 	}
-	write(1, "EFree1\n", 7);
+	ft_putendl_fd("EFree1\n", 2);
 	return (0);
 }
 
@@ -38,7 +39,7 @@ void		free(void *ptr)
 	t_node	*tmp;
 	t_node	*tmp2;
 
-	write(1, "SFree0\n", 7);
+	ft_putendl_fd("SFree0\n", 2);
 
 	if (ptr == NULL)
 		return;
@@ -60,5 +61,5 @@ void		free(void *ptr)
 		}
 		tmp = tmp->next;
 	}
-	write(1, "EFree0\n", 7);
+	ft_putendl_fd("EFree0\n", 2);
 }
