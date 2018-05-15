@@ -8,75 +8,76 @@
 // getpagesize
 #include <unistd.h>
 
-void		*add(t_node *node, size_t size, size_t max)
+// mutex
+#include <pthread.h>
+
+t_node		*get_free_block(size_t size)
 {
-	ft_putendl_fd("Start1\n", 2);
+	t_node	*curr;
 
-	t_node *curr;
-	t_node *tmp;
-
-	curr = node;
-	while(curr->next != NULL)
+	curr = get_node();
+	while (curr->next != NULL)
 	{
-		ft_putendl_fd("While\n", 2);
-		if ((size_t)(char *)curr->next - (size_t)(char *)curr->end >= size)
+		if (curr->next->is_free && curr->next->size >= size)
 		{
-			ft_putendl_fd("x\n", 2);
-			break;
+			ft_putendl("found free");
+			return curr->next;
 		}
 		curr = curr->next;
 	}
-	if (((char *)curr->end + size) > ((char *)node + max))
-	{
-		ft_putendl_fd("y\n", 2);
-		return NULL;
-	}
-	tmp = curr->next;
-	curr->next = curr->end;
-	curr->next->end = (t_node *)((char *)curr->next + size);
-	curr->next->next = tmp;
-
-	ft_putendl_fd("End1\n", 3);
-	return curr->next;
+	ft_putendl("no found free");
+	return curr;
 }
 
 void		*malloc(size_t size)
 {
-	size_t		len;
-	t_node		*tmp;
+	size_t len;
+	t_node *header;
+	t_node *new;
 
-	ft_putendl_fd("Start0\n", 2);
-
-	if (size <= 0)
+	if (size == 0)
 		return NULL;
+
+	pthread_mutex_lock(&g_mutex);
+	ft_putendl_fd("-- MALLOC -> Start0", 2);
+
+	header = get_free_block(size);
+
+	if (header->next != NULL)
+	{
+		header->next->is_free = 0;
+		ft_putendl_fd("-- MALLOC NOT NULL -> End0", 2);
+		pthread_mutex_unlock(&g_mutex);
+		return ((void *)header->next + 1);
+	}
 
 	len = size + sizeof(t_node);
-	if (len <= get_lst()->size_tiny)
-	{
-		ft_putendl_fd("TINY\n", 2);
-		return add(get_lst()->tiny, len, get_lst()->size_tiny);
-	}
-	if (len <= get_lst()->size_small)
-	{
-		ft_putendl_fd("SMALL\n", 2);
-		return add(get_lst()->small, len, get_lst()->size_small);
-	}
+	new = mmap(NULL, len,
+			PROT_READ | PROT_WRITE,
+			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+	if (new == NULL)
+		return (NULL);
 
-	ft_putendl_fd("LARGE\n", 2);
-	tmp = get_lst()->large;
-	while(tmp->next != NULL)
-		tmp = tmp->next;
+	header->next = new;
+	header->next->size = size;
+	header->next->is_free = 0;
+	header->next->next = NULL;
 
-	if (NULL == (tmp->next = mmap(NULL, len,
-					PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
-		return NULL;
+	ft_putstr("header->next -> ");
+	ft_puthex(header->next);
+	ft_putstr("get_node()->next -> ");
+	ft_puthex(get_node()->next);
+	ft_putstr("header->next + 1 -> ");
+	ft_puthex(header->next + 1);
 
-	tmp->next->end = (t_node *)((char *)tmp->next + len);
-	tmp->next->next = NULL;
+	/* if (get_node()->next == NULL) */
+	/*     get_node() = header->next; */
 
-	ft_putendl_fd("End0\n", 2);
+	show_alloc_mem();
+	ft_putendl_fd("-- MALLOC -> End0", 2);
+	pthread_mutex_unlock(&g_mutex);
 
-	return (void*)(tmp->next + 1);
+	return ((void *)header + 1);
 }
 
 // https://arjunsreedharan.org/post/148675821737/write-a-simple-memory-allocator

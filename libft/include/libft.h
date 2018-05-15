@@ -6,7 +6,7 @@
 /*   By: avacher <avacher@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 17:49:05 by avacher           #+#    #+#             */
-/*   Updated: 2016/01/13 19:32:15 by avacher          ###   ########.fr       */
+/*   Updated: 2018/05/15 17:09:20 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void					ft_putstr_color_fd(int fd, char *color, char *s);
 void					ft_putstr_print(const char *s);
 void					ft_putstr_print_fd(const char *s, int fd);
 void					ft_putstr_visible(const char *s);
+void					ft_puthex(const void *ptr);
 
 t_list					*ft_lstnew(char *content);
 void					ft_lstdelone(t_list **alst, void (*del)(void *, int));

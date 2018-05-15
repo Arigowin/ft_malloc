@@ -3,31 +3,38 @@
 
 # include <stdlib.h>
 
+// mutex
+#include <pthread.h>
+
 # define TINY 16
 # define SMALL 32
 
-typedef struct		s_node
+typedef struct			s_node
 {
-	struct s_node	*end;
-	struct s_node	*next;
-}					t_node;
+	size_t				size;
+	char				is_free;
+	struct s_node		*next;
+}						t_node;
 
-typedef struct		s_lst
+typedef struct			s_lst
 {
-	t_node			*tiny;
-	size_t			size_tiny; // TINY * getpagesize()
-	t_node			*small;
-	size_t			size_small; // SMALL * getpagesize()
-	t_node			*large;
-}					t_lst;
+	// t_node			*tiny;
+	// size_t			size_tiny;
+	// t_node			*small;
+	// size_t			size_small;
+	t_node				*large;
+}						t_lst;
 
-static t_lst		*g_lst = NULL;
+static t_lst			*g_lst = NULL;
+static t_node			*g_node = NULL;
+static pthread_mutex_t	g_mutex;
 
-void				*malloc(size_t size);
-void				free(void *ptr);
-// void				*realloc(void *ptr, size_t size);
-// void				show_alloc_mem();
-t_lst				*get_lst(void);
+void					*malloc(size_t size);
+void					free(void *ptr);
+// void					*realloc(void *ptr, size_t size);
+void					show_alloc_mem();
+// t_lst					*get_lst(void);
+t_node					*get_node(void);
 
 #endif // LIBFT_MALLOC_H
 

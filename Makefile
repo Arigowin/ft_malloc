@@ -26,8 +26,9 @@ CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -I $(LIBHPATH) -fPIC -g
 LIBS = -L $(LIBPATH) -lft
 
 SRC = malloc.c \
+	  lst.c \
 	  free.c \
-	  lst.c
+	  show_alloc_mem.c
 
 
 .PHONY: all clean fclean re lib.fclean test
@@ -37,7 +38,7 @@ all: $(OPATH) $(NAME)
 $(NAME): $(OFILES)
 	@$(MAKE) -C $(LIBPATH) -j
 	@echo "$(LNNAME) - Building $@"
-	@$(CC) $(CFLAGS) -o $@ $^ -shared
+	@$(CC) $(CFLAGS) $(LIBS) -o $@ $^ -shared
 	@$(RM) -f $(LNNAME)
 	@$(LN) -s $(NAME) $(LNNAME)
 	@echo "\033[34m$(LNNAME) - All is done!\033[0m"

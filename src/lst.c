@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "malloc.h"
 
 // mmap
@@ -7,49 +8,47 @@
 // getpagesize
 #include <unistd.h>
 
-void		init_tiny(void)
-{
-	g_lst->size_tiny = sizeof(t_node) * TINY  * getpagesize();
-	g_lst->tiny = (t_node *)(g_lst + 1);
-	g_lst->tiny->end = g_lst->tiny + 2;
-	g_lst->tiny->next = NULL;
-}
+/* t_lst		*get_lst(void) */
+/* { */
+/*     if (g_lst == NULL) */
+/*     { */
+/*         ft_putendl_fd("Start2", 2); */
+/*         g_lst = mmap(NULL, sizeof(t_lst), */
+/*                 PROT_READ | PROT_WRITE, */
+/*                 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0); */
+/*         if (g_lst == NULL) */
+/*             return NULL; */
+/*  */
+/*         g_lst->large = mmap(NULL, sizeof(t_node) + getpagesize(), */
+/*                 PROT_READ | PROT_WRITE, */
+/*                 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0); */
+/*         if (g_lst->large == NULL) */
+/*             return NULL; */
+/*  */
+/*         g_lst->large->size = sizeof(t_node) + getpagesize(); */
+/*         g_lst->large->is_free = 1; */
+/*         g_lst->large->next = NULL; */
+/*  */
+/*         ft_putendl_fd("End2", 2); */
+/*     } */
+/*     return g_lst; */
+/* } */
 
-void		init_small(void)
+t_node		*get_node(void)
 {
-	g_lst->size_small = sizeof(t_node) * SMALL * getpagesize();
-	g_lst->small = (t_node *)((char *)g_lst->tiny + g_lst->size_tiny);
-	g_lst->small->end = g_lst->small + 1;
-	g_lst->small->next = NULL;
-}
-
-void		init_large(void)
-{
-	g_lst->large = (t_node *)(g_lst->tiny + 1);
-	g_lst->large->end = g_lst->large + 1;
-	g_lst->large->next = NULL;
-}
-
-t_lst		*get_lst(void)
-{
-	if (g_lst == NULL)
+	if (g_node == NULL)
 	{
-		write(1, "Start2\n", 7);
-		if (NULL == (g_lst = mmap(NULL,
-						sizeof(t_lst)
-						+ sizeof(t_node) * 100 * getpagesize() * TINY
-						+ sizeof(t_node) * 100 * getpagesize() * SMALL,
-						PROT_READ | PROT_WRITE,
-						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
-			return NULL; // error
-
-		init_tiny();
-		init_small();
-		init_large();
-
-		write(1, "End2\n", 5);
+		g_node = mmap(NULL, sizeof(t_node),
+				PROT_READ | PROT_WRITE,
+				MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+		g_node->size = sizeof(t_node);
+		g_node->is_free = 0;
+		g_node->next = NULL;
+		ft_putendl("alloc g_node");
+		ft_putstr("g_node -> ");
+		ft_puthex(g_node);
 	}
 
-	return g_lst;
+	return (g_node);
 }
 

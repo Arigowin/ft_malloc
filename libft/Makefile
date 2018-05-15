@@ -6,7 +6,7 @@
 #    By: avacher <avacher@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/25 17:44:48 by avacher           #+#    #+#              #
-#    Updated: 2017/04/13 18:49:16 by dolewski         ###   ########.fr        #
+#    Updated: 2018/05/15 17:08:08 by dolewski         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = libft.a
@@ -100,6 +100,7 @@ SRC = ft_memset.c \
 	  ft_putstr_print.c \
 	  ft_putstr_print_fd.c \
 	  ft_putstr_visible.c \
+	  ft_puthex.c \
 \
 	  ft_lstnew.c \
 	  ft_lstdelone.c \

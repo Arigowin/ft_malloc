@@ -1,6 +1,7 @@
 #!/bin/bash
 
-gcc -o test test.c
+gcc -o test test.c -I../include  -L.. -lft_malloc
+gcc -o test0 test0.c
 gcc -o test1 test1.c
 gcc -o test2 test2.c
 gcc -o test3 test3.c
