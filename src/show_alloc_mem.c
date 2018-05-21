@@ -8,15 +8,17 @@ void		show_alloc_mem()
 	ft_putendl("\n\nSHOW ALLOC MEM");
 	pthread_mutex_lock(&g_mutex);
 
-	ft_putstr("get_node() -> ");
-	ft_puthex(get_node());
 	tmp = get_node();
 	while (tmp != NULL)
 	{
 		ft_putstr("tmp -> ");
 		ft_puthex(tmp);
-		ft_putstr("tmp + 1 -> ");
-		ft_puthex(tmp + 1);
+		ft_putstr("tmp->size -> ");
+		ft_putnbrendl(tmp->size);
+		ft_putstr("tmp->is_free -> ");
+		ft_putnbrendl(tmp->is_free);
+		ft_putstr("tmp + sizeof(t_node) -> ");
+		ft_puthex(tmp + sizeof(t_node));
 		tmp = tmp->next;
 	}
 

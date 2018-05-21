@@ -10,6 +10,7 @@
 
 // mutex
 #include <pthread.h>
+pthread_mutex_t	g_mutex;
 
 t_node		*get_free_block(size_t size)
 {
@@ -21,21 +22,20 @@ t_node		*get_free_block(size_t size)
 		if (curr->next->is_free && curr->next->size >= size)
 		{
 			ft_putendl("found free");
-			return curr->next;
+			return curr;
 		}
 		curr = curr->next;
 	}
-	ft_putendl("no found free");
 	return curr;
 }
 
 void		*malloc(size_t size)
 {
-	size_t len;
-	t_node *header;
-	t_node *new;
+	size_t		len;
+	t_node		*header;
+	t_alloc		*tmp = get_alloc();
+	(void)tmp;
 
-	ft_putendl_fd("-- MALLOC -> Start0", 2);
 	if (size == 0)
 		return NULL;
 
@@ -49,36 +49,32 @@ void		*malloc(size_t size)
 		header->next->is_free = 0;
 		ft_putendl_fd("-- MALLOC NOT NULL -> End0", 2);
 		pthread_mutex_unlock(&g_mutex);
-		return ((void *)header->next + 1);
+		return ((void *)(header->next + sizeof(t_node)));
 	}
 
 	len = size + sizeof(t_node);
-	new = mmap(NULL, len,
-			PROT_READ | PROT_WRITE,
-			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-	if (new == NULL)
+	if (NULL == (header->next = mmap(NULL, len,
+					PROT_READ | PROT_WRITE,
+					MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
+	{
+		pthread_mutex_unlock(&g_mutex);
+		ft_putendl_fd("----------------------------------------- MMAP FAILED", 2);
 		return (NULL);
+	}
 
-	header->next = new;
 	header->next->size = size;
 	header->next->is_free = 0;
 	header->next->next = NULL;
 
 	ft_putstr("header->next -> ");
 	ft_puthex(header->next);
-	ft_putstr("get_node()->next -> ");
-	ft_puthex(get_node()->next);
-	ft_putstr("header->next + 1 -> ");
-	ft_puthex(header->next + 1);
+	ft_putstr("(void *)(header->next + sizeof(t_node)) -> ");
+	ft_puthex((void *)(header->next + sizeof(t_node)));
 
-	/* if (get_node()->next == NULL) */
-	/*     get_node() = header->next; */
-
-	show_alloc_mem();
 	ft_putendl_fd("-- MALLOC -> End0", 2);
 	pthread_mutex_unlock(&g_mutex);
 
-	return ((void *)header + 1);
+	return ((void *)(header->next + sizeof(t_node)));
 }
 
 // https://arjunsreedharan.org/post/148675821737/write-a-simple-memory-allocator
