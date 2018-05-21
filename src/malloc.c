@@ -35,6 +35,7 @@ void		*malloc(size_t size)
 	t_node *header;
 	t_node *new;
 
+	ft_putendl_fd("-- MALLOC -> Start0", 2);
 	if (size == 0)
 		return NULL;
 

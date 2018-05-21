@@ -34,6 +34,8 @@
 /*     return g_lst; */
 /* } */
 
+t_node			*g_node = NULL;
+
 t_node		*get_node(void)
 {
 	if (g_node == NULL)

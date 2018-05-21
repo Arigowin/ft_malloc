@@ -25,9 +25,9 @@ typedef struct			s_lst
 	t_node				*large;
 }						t_lst;
 
-static t_lst			*g_lst = NULL;
-static t_node			*g_node = NULL;
-static pthread_mutex_t	g_mutex;
+extern t_lst			*g_lst;
+extern t_node			*g_node;
+extern pthread_mutex_t	g_mutex;
 
 void					*malloc(size_t size);
 void					free(void *ptr);
