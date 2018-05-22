@@ -6,8 +6,8 @@
 // mutex
 #include <pthread.h>
 
-# define TINY 16
-# define SMALL 32
+# define TINY 32
+# define SMALL 64
 
 typedef struct			s_node
 {
@@ -26,7 +26,6 @@ typedef struct			s_alloc
 }						t_alloc;
 
 extern t_alloc			*g_alloc;
-extern t_node			*g_node;
 extern pthread_mutex_t	g_mutex;
 
 void					*malloc(size_t size);
@@ -34,7 +33,6 @@ void					free(void *ptr);
 // void					*realloc(void *ptr, size_t size);
 void					show_alloc_mem();
 t_alloc					*get_alloc(void);
-t_node					*get_node(void);
 
 #endif // LIBFT_MALLOC_H
 

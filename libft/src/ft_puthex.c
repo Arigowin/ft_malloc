@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/15 17:34:47 by dolewski          #+#    #+#             */
-/*   Updated: 2018/05/15 17:49:05 by dolewski         ###   ########.fr       */
+/*   Updated: 2018/05/22 02:03:21 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,4 @@ void	ft_puthex(const void *ptr)
 		ft_putchar(hex_digit((p >> i) & 0xF));
 		i -= 4;
 	}
-	ft_putendl("");
 }

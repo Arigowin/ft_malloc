@@ -1,26 +1,48 @@
 #include "libft.h"
 #include "malloc.h"
 
-void		show_alloc_mem()
+// mutex
+#include <pthread.h>
+pthread_mutex_t	g_mutex;
+
+void			show_alloc(t_node *curr)
 {
-	t_node		*tmp;
+
+	while (curr != NULL)
+	{
+		if (!curr->is_free)
+		{
+			ft_puthex(curr + sizeof(t_node));
+			ft_putstr(" - ");
+			ft_puthex(curr + curr->size + sizeof(t_node));
+			ft_putstr(" : ");
+			ft_putnbr(curr->size);
+			ft_putstr(" octets");
+			ft_putstr(" free : ");
+			ft_putnbrendl(curr->is_free);
+		}
+		curr = curr->next;
+	}
+}
+
+void			show_alloc_mem(void)
+{
 
 	ft_putendl("\n\nSHOW ALLOC MEM");
 	pthread_mutex_lock(&g_mutex);
 
-	tmp = get_node();
-	while (tmp != NULL)
-	{
-		ft_putstr("tmp -> ");
-		ft_puthex(tmp);
-		ft_putstr("tmp->size -> ");
-		ft_putnbrendl(tmp->size);
-		ft_putstr("tmp->is_free -> ");
-		ft_putnbrendl(tmp->is_free);
-		ft_putstr("tmp + sizeof(t_node) -> ");
-		ft_puthex(tmp + sizeof(t_node));
-		tmp = tmp->next;
-	}
+	ft_putstr("TINY : ");
+	ft_puthex(get_alloc()->tiny);
+	ft_putendl("");
+	show_alloc(get_alloc()->tiny);
+	ft_putstr("SMALL : ");
+	ft_puthex(get_alloc()->small);
+	ft_putendl("");
+	show_alloc(get_alloc()->small);
+	ft_putstr("LARGE : ");
+	ft_puthex(get_alloc()->large);
+	ft_putendl("");
+	show_alloc(get_alloc()->large);
 
 	pthread_mutex_unlock(&g_mutex);
 	ft_putendl("END SHOW ALLOC MEM\n\n");
