@@ -1,4 +1,3 @@
-#include "libft.h"
 #include "malloc.h"
 
 // munmap
@@ -16,7 +15,7 @@ void			free(void *ptr)
 {
 	/* t_node	*tmp; */
 
-	ft_putendl_fd("-- FREE -> Start0", 2);
+	ft_putendl("-- FREE -> Start0");
 
 	if (ptr == NULL)
 		return;
@@ -56,5 +55,5 @@ void			free(void *ptr)
 	/*     ft_putendl("Not Found"); */
 
 	pthread_mutex_unlock(&g_mutex);
-	ft_putendl_fd("-- FREE -> End0", 2);
+	ft_putendl("-- FREE -> End0");
 }

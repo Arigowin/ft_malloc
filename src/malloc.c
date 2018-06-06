@@ -1,4 +1,3 @@
-#include "libft.h"
 #include "malloc.h"
 
 // mmap
@@ -63,7 +62,7 @@ void			*malloc(size_t size)
 		return NULL;
 
 	pthread_mutex_lock(&g_mutex);
-	ft_putendl_fd("-- MALLOC -> Start0", 2);
+	ft_putendl("-- MALLOC -> Start0");
 	ft_putstr("size -> ");
 	ft_putnbrendl(size);
 
@@ -96,7 +95,7 @@ void			*malloc(size_t size)
 	if (header != NULL)
 	{
 		header->is_free = 0;
-		ft_putendl_fd("-- MALLOC NOT NULL -> End0", 2);
+		ft_putendl("-- MALLOC NOT NULL -> End0");
 		pthread_mutex_unlock(&g_mutex);
 		return ((void *)(header + sizeof(t_node)));
 	}
@@ -106,7 +105,7 @@ void			*malloc(size_t size)
 					MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 	{
 		pthread_mutex_unlock(&g_mutex);
-		ft_putendl_fd("----------------------------------------- MMAP FAILED", 2);
+		ft_putendl("----------------------------------------- MMAP FAILED");
 		return (NULL);
 	}
 
@@ -120,7 +119,7 @@ void			*malloc(size_t size)
 	ft_puthex((void *)(header + sizeof(t_node)));
 	ft_putendl("");
 
-	ft_putendl_fd("-- MALLOC -> End0", 2);
+	ft_putendl("-- MALLOC -> End0");
 	pthread_mutex_unlock(&g_mutex);
 
 	show_alloc_mem();

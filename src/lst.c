@@ -1,4 +1,3 @@
-#include "libft.h"
 #include "malloc.h"
 
 // mmap
@@ -25,7 +24,7 @@ t_alloc		*get_alloc(void)
 						PROT_READ | PROT_WRITE,
 						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 		{
-			ft_putendl_fd("----------------------------------------- MMAP FAILED", 2);
+			ft_putendl("----------------------------------------- MMAP FAILED");
 			return NULL;
 		}
 

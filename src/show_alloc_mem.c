@@ -1,4 +1,3 @@
-#include "libft.h"
 #include "malloc.h"
 
 // mutex

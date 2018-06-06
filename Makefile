@@ -10,8 +10,6 @@ ROOT =		$(shell /bin/pwd)
 OPATH =		$(ROOT)/obj
 CPATH =		$(ROOT)/src
 HPATH =		$(ROOT)/include
-LIBPATH =	$(ROOT)/libft
-LIBHPATH =	$(LIBPATH)/include
 
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
@@ -22,23 +20,28 @@ LNNAME = libft_malloc.so
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 
-CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -I $(LIBHPATH) -fPIC -g
-LIBS = -L $(LIBPATH) -lft
+CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -fPIC -g
 
 SRC = malloc.c \
 	  lst.c \
 	  free.c \
-	  show_alloc_mem.c
+	  show_alloc_mem.c \
+	  ft_putchar.c \
+	  ft_putendl.c \
+	  ft_puthex.c \
+	  ft_putstr.c \
+	  ft_putnbrendl.c \
+	  ft_putnbr.c \
+	  ft_strlen.c
 
 
-.PHONY: all clean fclean re lib.fclean test
+.PHONY: all clean fclean re test
 
 all: $(OPATH) $(NAME)
 
 $(NAME): $(OFILES)
-	@$(MAKE) -C $(LIBPATH) -j
 	@echo "$(LNNAME) - Building $@"
-	@$(CC) $(CFLAGS) $(LIBS) -o $@ $^ -shared
+	@$(CC) $(CFLAGS) -o $@ $^ -shared
 	@$(RM) -f $(LNNAME)
 	@$(LN) -s $(NAME) $(LNNAME)
 	@echo "\033[34m$(LNNAME) - All is done!\033[0m"
@@ -53,10 +56,7 @@ clean:
 	@echo "$(LNNAME) - Deleting OBJ"
 	@$(RM) -Rf $(OPATH)
 
-lib.fclean:
-	@$(MAKE) fclean -C $(LIBPATH) -j
-
-fclean: clean lib.fclean
+fclean: clean
 	@echo "$(LNNAME) - Deleting $(NAME)"
 	@$(RM) -f $(NAME)
 	@$(RM) -f $(LNNAME)
