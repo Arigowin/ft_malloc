@@ -4,22 +4,26 @@
 #include <pthread.h>
 pthread_mutex_t	g_mutex;
 
-void			show_alloc(t_node *curr)
+void			show_alloc(t_block *curr)
 {
-
 	while (curr != NULL)
 	{
-		if (!curr->is_free)
-		{
-			ft_puthex(curr + sizeof(t_node));
-			ft_putstr(" - ");
-			ft_puthex(curr + curr->size + sizeof(t_node));
-			ft_putstr(" : ");
-			ft_putnbr(curr->size);
-			ft_putstr(" octets");
-			ft_putstr(" free : ");
-			ft_putnbrendl(curr->is_free);
-		}
+		/* if (!curr->is_free) */
+		/* { */
+		ft_puthex(curr);
+		ft_putstr(" - ");
+		ft_puthex(curr->data);
+		ft_putstr(" - ");
+		ft_puthex(curr->data + curr->size);
+		ft_putstr(" : ");
+		ft_putnbr(curr->size);
+		ft_putstr(" octets");
+		ft_putstr(" [");
+		ft_putstr(curr->data);
+		ft_putstr("]");
+		ft_putstr(" free : ");
+		ft_putnbrendl(curr->is_free);
+		/* } */
 		curr = curr->next;
 	}
 }

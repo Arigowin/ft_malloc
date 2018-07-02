@@ -18,21 +18,35 @@ int main(void)
 
 	/* printf("%d\n", getpagesize()); */
 
-	char *tmp = (char *)malloc(32 * 4096 + 1);
+	/* char *tmp = (char *)malloc(32 * 4096 + 1); */
 	/* printf("%p\n", tmp); */
 
-	if (tmp == NULL)
-		return (-1);
+	/* if (tmp == NULL) */
+	/*     return (-1); */
+	/*  */
+	/* int i = 0; */
+	/* while(i < 32 * 4096) */
+	/* { */
+	/*     tmp[i] = '*'; */
+	/*     i++; */
+	/* } */
+	/* tmp[32 * 4096] = '\0'; */
 
-	int i = 0;
-	while(i < 32 * 4096)
+	int i = 1;
+	while(i < 21)
 	{
-		tmp[i] = '*';
+		char *tmp = (char *)malloc(i);
+		int j = 0;
+		while (j < i)
+		{
+			tmp[j] = 42;
+			j++;
+		}
 		i++;
 	}
-	tmp[32 * 4096] = '\0';
+
 	write(1, "\nDone\n", 5);
-	free(tmp);
+	/* free(tmp); */
 
 	return (0);
 }

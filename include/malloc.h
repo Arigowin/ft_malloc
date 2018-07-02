@@ -9,20 +9,19 @@
 # define TINY 32
 # define SMALL 64
 
-typedef struct			s_node
+typedef struct			s_block
 {
 	size_t				size;
+	struct s_block		*next;
 	char				is_free;
-	struct s_node		*next;
-}						t_node;
+	char				data[1];
+}						t_block;
 
 typedef struct			s_alloc
 {
-	t_node				*tiny;
-	size_t				size_tiny;
-	t_node				*small;
-	size_t				size_small;
-	t_node				*large;
+	t_block				*tiny;
+	t_block				*small;
+	t_block				*large;
 }						t_alloc;
 
 extern t_alloc			*g_alloc;
@@ -34,13 +33,16 @@ void					free(void *ptr);
 void					show_alloc_mem();
 t_alloc					*get_alloc(void);
 
-void	ft_putchar(char c);
-void	ft_putendl(char const *s);
-void	ft_puthex(const void *ptr);
-void	ft_putstr(const char *s);
-void			ft_putnbrendl(int n);
-void			ft_putnbr(int n);
-int				ft_strlen(const char *s);
+void					ft_putchar(char c);
+void					ft_putendl(char const *s);
+void					ft_puthex(const void *ptr);
+void					ft_putstr(const char *s);
+void					ft_putnbrendl(int n);
+void					ft_putnbr(int n);
+int						ft_strlen(const char *s);
+void					*ft_memcpy(void *s1, const void *s2, int n);
+void					ft_bzero(void *s, int n);
+void					*ft_memset(void *b, int c, int len);
 
 #endif // LIBFT_MALLOC_H
 

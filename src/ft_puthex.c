@@ -2,29 +2,21 @@
 #include <unistd.h>
 #include <stdint.h>
 
-char	hex_digit(int v)
+void		ft_puthex(const void *ptr)
 {
-	if (v >= 0 && v <= 9)
-		return ('0' + v);
-	else
-		return ('A' + v - 10);
-}
+	char	alpha[16];
+	char	res[9];
+	size_t	addr;
+	int		i;
 
-void	ft_puthex(const void *ptr)
-{
-	int			i;
-	uintptr_t	p;
-
-	p = (uintptr_t)ptr;
-	i = (sizeof(p) << 3);
+	ft_memcpy(alpha, "0123456789ABCDEF", 16);
+	ft_bzero(res, 9);
+	ft_memset(res, '0', 8);
+	i = 7;
+	addr = (size_t)ptr;
+	res[i--] = alpha[addr % 16];
+	while ((addr /= 16) > 0 && i > -1)
+		res[i--] = alpha[addr % 16];
 	ft_putstr("0x");
-	while (i >= 0 && ((p >> i) & 0xF) == 0)
-		i -= 4;
-	if (i <= 0)
-		ft_putchar('0');
-	while (i >= 0)
-	{
-		ft_putchar(hex_digit((p >> i) & 0xF));
-		i -= 4;
-	}
+	ft_putstr(res);
 }

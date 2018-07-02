@@ -32,7 +32,10 @@ SRC = malloc.c \
 	  ft_putstr.c \
 	  ft_putnbrendl.c \
 	  ft_putnbr.c \
-	  ft_strlen.c
+	  ft_strlen.c \
+	  ft_bzero.c \
+	  ft_memcpy.c \
+	  ft_memset.c
 
 
 .PHONY: all clean fclean re test
