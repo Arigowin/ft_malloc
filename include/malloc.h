@@ -6,7 +6,7 @@
 // mutex
 #include <pthread.h>
 
-# define TINY 32
+# define TINY 16
 # define SMALL 64
 
 typedef struct			s_block
@@ -14,7 +14,6 @@ typedef struct			s_block
 	size_t				size;
 	struct s_block		*next;
 	char				is_free;
-	char				data[1];
 }						t_block;
 
 typedef struct			s_alloc

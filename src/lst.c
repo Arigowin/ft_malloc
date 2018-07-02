@@ -13,22 +13,33 @@ t_alloc		*get_alloc(void)
 {
 	if (g_alloc == NULL)
 	{
-		if (MAP_FAILED == (g_alloc = mmap(NULL, 0
-						+ getpagesize() * 2,
-						/* + getpagesize() + (100 * sizeof(t_block)), */
+		if (MAP_FAILED == (g_alloc = mmap(NULL,
+						getpagesize() * TINY
+						+ getpagesize() * SMALL
+						+ getpagesize(),
 						PROT_READ | PROT_WRITE,
 						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 			return (NULL);
 
-
+		ft_putendl("TINY");
 		g_alloc->tiny = (t_block *)(g_alloc + 1);
-		g_alloc->tiny->size = 0;
+		g_alloc->tiny->size = 0; // getpagesize() * TINY
 		g_alloc->tiny->next = NULL;
-		g_alloc->tiny->is_free = 0;
+		g_alloc->tiny->is_free = 1;
 
-		g_alloc->small = NULL;
+		ft_putendl("SMALL");
+		g_alloc->small = (t_block *)((char *)g_alloc->tiny + (getpagesize() * TINY));
+		g_alloc->small->size = 0; // getpagesize() * SMALL
+		g_alloc->small->next = NULL;
+		g_alloc->small->is_free = 1;
 
-		g_alloc->large = NULL;
+		ft_putendl("LARGE");
+		g_alloc->large = (t_block *)((char *)g_alloc->small + (getpagesize() * SMALL));
+		g_alloc->large->size = 0; // getpagesize() - sizeof(t_alloc)
+		g_alloc->large->next = NULL;
+		g_alloc->large->is_free = 1;
+
+		ft_putendl("END INIT");
 	}
 	return g_alloc;
 }
