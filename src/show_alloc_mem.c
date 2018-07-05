@@ -9,25 +9,26 @@ void			show_alloc(t_block *curr)
 	int i = 0;
 	while (curr != NULL)
 	{
-		ft_putnbr(++i);
-		ft_putstr(" - ");
-		/* if (!curr->is_free) */
+		/* if (curr->is_free) */
 		/* { */
-		ft_putnbr(sizeof(t_block)); // 24
-		ft_putstr(" - ");
-		ft_puthex((void *)curr); // 0
-		ft_putstr(" - ");
-		ft_puthex((void *)(curr + 1)); // 24
-		ft_putstr(" - ");
-		ft_puthex((void *)((void *)(curr + 1) + curr->size)); // 25
-		ft_putstr(" : ");
-		ft_putnbr(curr->size);
-		ft_putstr(" octets");
-		/* ft_putstr(" ["); */
-		/* ft_putstr((char *)(curr + sizeof(t_block))); */
-		/* ft_putstr("]"); */
-		ft_putstr(" free : ");
-		ft_putnbrendl(curr->is_free);
+			ft_putnbr(++i);
+			ft_putstr(" - ");
+
+			ft_putnbr(sizeof(t_block)); // 24
+			ft_putstr(" - ");
+			ft_puthex((void *)curr); // 0
+			ft_putstr(" - ");
+			ft_puthex((void *)(curr + 1)); // 24
+			ft_putstr(" - ");
+			ft_puthex((void *)((void *)(curr + 1) + curr->size)); // 25
+			ft_putstr(" : ");
+			ft_putnbr(curr->size);
+			ft_putstr(" octets");
+			/* ft_putstr(" ["); */
+			/* ft_putstr((char *)(curr + sizeof(t_block))); */
+			/* ft_putstr("]"); */
+			ft_putstr(" free : ");
+			ft_putnbrendl(curr->is_free);
 		/* } */
 		curr = curr->next;
 	}

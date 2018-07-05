@@ -15,37 +15,64 @@ pthread_mutex_t	g_mutex;
 // pareil pour SMALL -> LARGE
 // -> utiliser les block free
 
-void			*add_block(size_t size, t_block *head)
+t_block			*find_first_free(size_t size, t_block *head)
 {
 	t_block		*tmp;
 
-	ft_putendl("add_tiny_block");
 	tmp = head;
-
 	while (tmp->next != NULL)
+	{
+		if (tmp->is_free && tmp->size >= size)
+			return tmp;
 		tmp = tmp->next;
+	}
 
-	tmp->next = (void *)((void *)(tmp + 1) + tmp->size);
-	tmp->next->size = size;
-	tmp->next->is_free = 0;
-	tmp->next->next = NULL;
-	tmp->next->prev = tmp;
+	return (tmp);
+}
 
-	ft_puthex(tmp->next);
+void			*add_block(size_t size, t_block *head)
+{
+	t_block		*curr;
+	t_block		*next;
+
+	ft_putendl("add_block");
+	curr = find_first_free(size, head);
+	next = curr->next;
+
+	ft_putnbr(curr->size - size);
 	ft_putstr(" - ");
-	ft_puthex((void *)(tmp->next + 1));
+	ft_puthex(curr);
 	ft_putstr(" - ");
-	ft_puthex((void *)((void *)(tmp->next + 1) + tmp->next->size));
+	ft_puthex(curr->next);
+	ft_putstr(" - ");
+	if (curr->next)
+		ft_puthex(curr->next->next);
 	ft_putendl("");
 
-	return ((void *)(tmp->next + 1));
+	if ((long)(curr->size - size - sizeof(t_block)) > 0)
+	{
+		curr->next = (void *)((void *)(curr + 1) + size);
+		curr->next->size = curr->size - size - sizeof(t_block);
+		curr->next->is_free = 1;
+		curr->next->next = next;
+		curr->next->prev = curr;
+	}
+	else if (curr->next == NULL)
+	{
+		ft_putendl("XXX");
+		return (NULL);
+	}
+	curr->size = size;
+	curr->is_free = 0;
+
+	return ((void *)(curr + 1));
 }
 
 void			*add_large_block(size_t size)
 {
 	t_block		*tmp;
 
-	ft_putendl("add_tiny_block");
+	ft_putendl("add_large_block");
 	tmp = get_alloc()->large;
 
 	while(tmp->next != NULL)
@@ -75,23 +102,20 @@ void			*malloc(size_t size)
 {
 	void		*ret;
 
+	ret = NULL;
 	if (size <= 0)
-		return NULL;
+		return (ret);
 
 	pthread_mutex_lock(&g_mutex);
 	ft_putendl("-- MALLOC -> Start0");
 	ft_putstr("size -> ");
 	ft_putnbrendl(size);
-	ft_putnbrendl((size_t)(getpagesize() * TINY) / 100);
-	ft_putnbrendl((size_t)(getpagesize() * TINY) / 655);
-	ft_putnbrendl((size_t)(getpagesize() * SMALL) / 100);
-	ft_putnbrendl((size_t)(getpagesize() * SMALL) / 2621);
 
 	if (size < (size_t)(getpagesize() * TINY) / 100)
 		ret = add_block(size, get_alloc()->tiny);
-	else if (size < (size_t)(getpagesize() * SMALL) / 100)
+	if (ret == NULL && size < (size_t)(getpagesize() * SMALL) / 100)
 		ret = add_block(size, get_alloc()->small);
-	else
+	if (ret == NULL)
 		ret = add_large_block(size);
 
 	ft_putendl("-- MALLOC -> End0");

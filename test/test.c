@@ -32,19 +32,17 @@ int main(void)
 	/* } */
 	/* tmp[32 * 4096] = '\0'; */
 
-	int i = 0;
-	while(i < 20)
-	{
-		char *tmp = (char *)malloc(i);
-		int j = 0;
-		while (j < i)
-		{
-			tmp[j] = 42;
-			j++;
-		}
-		free(tmp);
-		i++;
-	}
+	char *tmp1 = (char *)malloc(100000);
+	char *tmp2 = (char *)malloc(1140000);
+	char *tmp3 = (char *)malloc(1000000);
+	free(tmp2);
+	char *tmp4 = (char *)malloc(250000);
+	char *tmp5 = (char *)malloc(250000);
+
+	free(tmp1);
+	free(tmp3);
+	free(tmp4);
+	free(tmp5);
 
 	write(1, "\nDone\n", 5);
 	/* free(tmp); */
