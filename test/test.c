@@ -32,8 +32,8 @@ int main(void)
 	/* } */
 	/* tmp[32 * 4096] = '\0'; */
 
-	int i = 1;
-	while(i < 21)
+	int i = 0;
+	while(i < 20)
 	{
 		char *tmp = (char *)malloc(i);
 		int j = 0;
@@ -42,6 +42,7 @@ int main(void)
 			tmp[j] = 42;
 			j++;
 		}
+		free(tmp);
 		i++;
 	}
 

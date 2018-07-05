@@ -6,21 +6,26 @@ pthread_mutex_t	g_mutex;
 
 void			show_alloc(t_block *curr)
 {
+	int i = 0;
 	while (curr != NULL)
 	{
+		ft_putnbr(++i);
+		ft_putstr(" - ");
 		/* if (!curr->is_free) */
 		/* { */
-		ft_puthex(curr);
+		ft_putnbr(sizeof(t_block)); // 24
 		ft_putstr(" - ");
-		ft_puthex(curr->data);
+		ft_puthex((void *)curr); // 0
 		ft_putstr(" - ");
-		ft_puthex(curr->data + curr->size);
+		ft_puthex((void *)(curr + 1)); // 24
+		ft_putstr(" - ");
+		ft_puthex((void *)((void *)(curr + 1) + curr->size)); // 25
 		ft_putstr(" : ");
 		ft_putnbr(curr->size);
 		ft_putstr(" octets");
-		ft_putstr(" [");
-		ft_putstr(curr->data);
-		ft_putstr("]");
+		/* ft_putstr(" ["); */
+		/* ft_putstr((char *)(curr + sizeof(t_block))); */
+		/* ft_putstr("]"); */
 		ft_putstr(" free : ");
 		ft_putnbrendl(curr->is_free);
 		/* } */
