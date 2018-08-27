@@ -23,9 +23,10 @@ OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -fPIC -g
 
 SRC = malloc.c \
-	  lst.c \
 	  free.c \
+	  realloc.c \
 	  show_alloc_mem.c \
+	  lst.c \
 	  ft_putchar.c \
 	  ft_putendl.c \
 	  ft_puthex.c \

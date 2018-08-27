@@ -44,9 +44,11 @@ void			*add_block(size_t size, t_block *head)
 	ft_puthex(curr);
 	ft_putstr(" - ");
 	ft_puthex(curr->next);
-	ft_putstr(" - ");
 	if (curr->next)
+	{
+		ft_putstr(" - ");
 		ft_puthex(curr->next->next);
+	}
 	ft_putendl("");
 
 	if ((long)(curr->size - size - sizeof(t_block)) > 0)
@@ -103,17 +105,21 @@ void			*malloc(size_t size)
 	void		*ret;
 
 	ret = NULL;
-	if (size <= 0)
-		return (ret);
 
 	pthread_mutex_lock(&g_mutex);
 	ft_putendl("-- MALLOC -> Start0");
 	ft_putstr("size -> ");
 	ft_putnbrendl(size);
 
-	if (size < (size_t)(getpagesize() * TINY) / 100)
+	if (size <= 0)
+	{
+		pthread_mutex_unlock(&g_mutex);
+		return (ret);
+	}
+
+	if (size <= (size_t)(TINY))
 		ret = add_block(size, get_alloc()->tiny);
-	if (ret == NULL && size < (size_t)(getpagesize() * SMALL) / 100)
+	if (ret == NULL && size <= (size_t)(SMALL))
 		ret = add_block(size, get_alloc()->small);
 	if (ret == NULL)
 		ret = add_large_block(size);

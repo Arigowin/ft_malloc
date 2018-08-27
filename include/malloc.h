@@ -6,8 +6,8 @@
 // mutex
 #include <pthread.h>
 
-# define TINY 16
-# define SMALL 64
+# define TINY 1024
+# define SMALL 2048
 
 typedef struct			s_block
 {
@@ -29,9 +29,11 @@ extern pthread_mutex_t	g_mutex;
 
 void					*malloc(size_t size);
 void					free(void *ptr);
-// void					*realloc(void *ptr, size_t size);
+void					*realloc(void *ptr, size_t size);
 void					show_alloc_mem();
+
 t_alloc					*get_alloc(void);
+t_block					*search_addr(void *ptr);
 
 void					ft_putchar(char c);
 void					ft_putendl(char const *s);
