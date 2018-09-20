@@ -6,8 +6,9 @@
 // mutex
 #include <pthread.h>
 
-# define TINY 1024
-# define SMALL 2048
+# define TINY 4096 //1024
+# define SMALL 8192 //2048
+#define DEBUG 0
 
 typedef struct			s_block
 {
@@ -42,9 +43,9 @@ void					ft_putstr(const char *s);
 void					ft_putnbrendl(int n);
 void					ft_putnbr(int n);
 int						ft_strlen(const char *s);
-void					*ft_memcpy(void *s1, const void *s2, int n);
-void					ft_bzero(void *s, int n);
-void					*ft_memset(void *b, int c, int len);
+void					*ft_memcpy(void *s1, const void *s2, size_t n);
+void					ft_bzero(void *s, size_t n);
+void					*ft_memset(void *b, int c, size_t len);
 
 #endif // LIBFT_MALLOC_H
 

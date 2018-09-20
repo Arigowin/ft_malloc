@@ -13,30 +13,76 @@ pthread_mutex_t	g_mutex;
 
 void			stack_free_block(t_block *curr)
 {
-	ft_putendl("STACK FREE BLOCKS start");
+	if (DEBUG)
+	{
+		ft_putstr("STACK FREE BLOCKS start ");
+		ft_puthex(curr);
+		ft_putendl("");
+	}
 
 	if (curr->next != NULL && curr->next->is_free)
 	{
-		ft_putstr("1Stack -> ");
-		ft_puthex(curr);
-		ft_putstr(" - ");
-		ft_puthex(curr->next);
-		ft_putendl("");
+		if (DEBUG)
+		{
+			ft_putstr("1Stack -> ");
+			ft_puthex(curr);
+			ft_putstr(" - ");
+			ft_puthex(curr->next);
+			ft_putendl("");
+		}
+		if (DEBUG)
+		{
+			ft_putstr("1[HJLK: curr: ");
+			ft_puthex(curr);
+			ft_putstr(" - ->prev: ");
+			ft_puthex(curr->prev);
+			ft_putstr(" - ->next: ");
+			ft_puthex(curr->next);
+			ft_putstr(" - ->prev->next: ");
+
+			if (curr->prev != NULL)
+				ft_puthex(curr->prev->next);
+			ft_putstr(" - ->next->prev: ");
+			if (curr->next != NULL)
+				ft_puthex(curr->next->prev);
+			ft_putstr(" - ->prev->prev: ");
+			if (curr->prev != NULL)
+				ft_puthex(curr->prev->prev);
+			ft_putstr(" - ->next->next: ");
+			if (curr->next != NULL)
+				ft_puthex(curr->next->next);
+			ft_putendl("]");
+		}
 		curr->size += curr->next->size + sizeof(t_block);
-		ft_putendl("FUCK1");
+		if (curr->next->next != NULL)
+			curr->next->next->prev = curr;
 		curr->next = curr->next->next;
+		if (DEBUG)
+		{
+			ft_putstr("2[HJLK: curr: ");
+			ft_puthex(curr);
+			ft_putstr(" - ->prev: ");
+			ft_puthex(curr->prev);
+			ft_putstr(" - ->next: ");
+			ft_puthex(curr->next);
+			ft_putstr(" - ->prev->next: ");
+
+			if (curr->prev != NULL)
+				ft_puthex(curr->prev->next);
+			ft_putstr(" - ->next->prev: ");
+			if (curr->next != NULL)
+				ft_puthex(curr->next->prev);
+			ft_putstr(" - ->prev->prev: ");
+			if (curr->prev != NULL)
+				ft_puthex(curr->prev->prev);
+			ft_putstr(" - ->next->next: ");
+			if (curr->next != NULL)
+				ft_puthex(curr->next->next);
+			ft_putendl("]");
+		}
 	}
-	/* if (curr->prev != NULL && curr->prev->is_free) */
-	/* { */
-	/*     ft_putstr("2Stack -> "); */
-	/*     ft_puthex(curr); */
-	/*     ft_putstr(" - "); */
-	/*     ft_puthex(curr->prev); */
-	/*     ft_putendl(""); */
-	/*     curr->prev->size += curr->size + sizeof(t_block); */
-	/*     curr->prev->next = curr->next; */
-	/* } */
-	ft_putendl("STACK FREE BLACKS end");
+	if (DEBUG)
+		ft_putendl("STACK FREE BLOCKS end");
 }
 
 void			free(void *ptr)
@@ -44,9 +90,12 @@ void			free(void *ptr)
 	t_block		*tmp;
 
 	pthread_mutex_lock(&g_mutex);
-	ft_putstr("-- FREE -> Start0 - ");
-	ft_puthex(ptr);
-	ft_putendl("");
+	if (DEBUG)
+	{
+		ft_putstr("-- FREE -> Start0 - ");
+		ft_puthex(ptr);
+		ft_putendl("");
+	}
 
 	if (ptr == NULL)
 	{
@@ -63,20 +112,24 @@ void			free(void *ptr)
 
 	tmp->is_free = 1;
 
-	ft_putstr("Free -> ptr: ");
-	ft_puthex(ptr);
-	ft_putstr(" - tmp: ");
-	ft_puthex(tmp);
-	ft_putstr(" - size: ");
-	ft_putnbr(tmp->size);
-	ft_putendl("");
-	ft_putendl(tmp->is_free == 1 ? "Free" : "Not Free");
+	if (DEBUG)
+	{
+		ft_putstr("Free -> ptr: ");
+		ft_puthex(ptr);
+		ft_putstr(" - tmp: ");
+		ft_puthex(tmp);
+		ft_putstr(" - size: ");
+		ft_putnbr(tmp->size);
+		ft_putendl("");
+		ft_putendl(tmp->is_free == 1 ? "Free" : "Not Free");
+	}
 
 	ptr = NULL;
 
-	if (tmp > get_alloc()->large)
+	if (tmp->size > SMALL)
 	{
-		ft_putendl("Free LARGE");
+		if (DEBUG)
+			ft_putendl("Free LARGE");
 		if (tmp->next)
 			tmp->next->prev = tmp->prev;
 		if (tmp->prev)
@@ -85,10 +138,12 @@ void			free(void *ptr)
 	}
 	else
 	{
-		ft_putendl("Free TNY SML");
+		if (DEBUG)
+			ft_putendl("Free TNY SML");
 		stack_free_block(tmp);
 	}
 
 	pthread_mutex_unlock(&g_mutex);
-	ft_putendl("-- FREE -> End0");
+	if (DEBUG)
+		ft_putendl("-- FREE -> End0");
 }

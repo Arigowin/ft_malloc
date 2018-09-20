@@ -1,8 +1,8 @@
 #include <string.h>
 
-void			*ft_memcpy(void *s1, const void *s2, int n)
+void			*ft_memcpy(void *s1, const void *s2, size_t n)
 {
-	int				i;
+	size_t			i;
 	char			*save_ptr;
 	const char		*save_ptr_2;
 

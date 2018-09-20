@@ -1,35 +1,45 @@
 #include "malloc.h"
 
+// getrlimit
+#include <sys/time.h>
+#include <sys/resource.h>
+
+#include <stdio.h>
+#include <stdint.h>
 // mutex
-#include <pthread.h>
-pthread_mutex_t	g_mutex;
+/* #include <pthread.h> */
+/* pthread_mutex_t	g_mutex; */
 
 void		*realloc(void *ptr, size_t size)
 {
 	void		*newptr;
 	t_block		*tmp;
 
-	/* pthread_mutex_lock(&g_mutex); */
-	ft_putstr("-- REALLOC -> Start0 - ");
-	ft_puthex(ptr);
-	ft_putstr(" - ");
-	ft_putnbrendl(size);
+	if (DEBUG)
+	{
+		ft_putstr("-- REALLOC -> Start0 - ");
+		ft_puthex(ptr);
+		ft_putstr(" - ");
+		ft_putnbrendl(size);
+	}
 
 	tmp = NULL;
 	if (ptr != NULL)
 	{
 		tmp = (t_block *)(ptr - sizeof(t_block));
 	}
-	ft_puthex(tmp);
-	ft_putendl(" - tmp");
+	if (DEBUG)
+	{
+		ft_puthex(tmp);
+		ft_putendl(" - tmp");
+	}
 	if (tmp != NULL && search_addr(tmp) == NULL)
 	{
-		ft_putendl("FUCK2");
-		pthread_mutex_unlock(&g_mutex);
+		if (DEBUG)
+			ft_putendl("FUCK2");
 		return (NULL);
 	}
 
-	ft_putendl("fuvgbhjrvbfyurjkfdhyukjrtgyugfuhik");
 	newptr = malloc(size);
 	if (ptr != NULL)
 	{
@@ -40,8 +50,10 @@ void		*realloc(void *ptr, size_t size)
 		free(ptr);
 	}
 
-	show_alloc_mem();
-	ft_putendl("-- REALLOC -> End0 RRRRRRRRRRRRRRRRRRRRRRRRRR");
-	/* pthread_mutex_unlock(&g_mutex); */
+	if (DEBUG)
+	{
+		show_alloc_mem();
+		ft_putendl("-- REALLOC -> End0 RRRRRRRRRRRRRRRRRRRRRRRRRR");
+	}
 	return (newptr);
 }
