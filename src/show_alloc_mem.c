@@ -1,58 +1,49 @@
 #include "malloc.h"
-
-// mutex
 #include <pthread.h>
+
 pthread_mutex_t	g_mutex;
 
-void			show_alloc(t_block *curr)
+int				show_alloc(t_block *curr)
 {
-	int i = 0;
+	int			total;
+
+	total = 0;
 	while (curr != NULL)
 	{
-		/* if (curr->is_free) */
-		/* { */
-			ft_putnbr(++i);
+		if (!curr->is_free)
+		{
+			ft_puthex((void *)(curr + 1));
 			ft_putstr(" - ");
-
-			ft_putnbr(sizeof(t_block)); // 24
-			ft_putstr(" - ");
-			ft_puthex((void *)curr); // 0
-			ft_putstr(" - ");
-			ft_puthex((void *)(curr + 1)); // 24
-			ft_putstr(" - ");
-			ft_puthex((void *)((void *)(curr + 1) + curr->size)); // 25
+			ft_puthex((void *)((void *)(curr + 1) + curr->size));
 			ft_putstr(" : ");
 			ft_putnbr(curr->size);
-			ft_putstr(" octets");
-			/* ft_putstr(" ["); */
-			/* ft_putstr((char *)(curr + sizeof(t_block))); */
-			/* ft_putstr("]"); */
-			ft_putstr(" free : ");
-			ft_putnbrendl(curr->is_free);
-		/* } */
+			ft_putendl(" octets");
+			total += curr->size;
+		}
 		curr = curr->next;
 	}
+	return (total);
 }
 
 void			show_alloc_mem(void)
 {
+	int total;
 
-	ft_putendl("\n\nSHOW ALLOC MEM");
 	pthread_mutex_lock(&g_mutex);
-
 	ft_putstr("TINY : ");
 	ft_puthex(get_alloc()->tiny);
 	ft_putendl("");
-	show_alloc(get_alloc()->tiny);
+	total = show_alloc(get_alloc()->tiny);
 	ft_putstr("SMALL : ");
 	ft_puthex(get_alloc()->small);
 	ft_putendl("");
-	show_alloc(get_alloc()->small);
+	total += show_alloc(get_alloc()->small);
 	ft_putstr("LARGE : ");
 	ft_puthex(get_alloc()->large);
 	ft_putendl("");
-	show_alloc(get_alloc()->large);
-
+	total += show_alloc(get_alloc()->large);
+	ft_putstr("Total : ");
+	ft_putnbr(total);
+	ft_putendl(" octets");
 	pthread_mutex_unlock(&g_mutex);
-	ft_putendl("END SHOW ALLOC MEM\n\n");
 }

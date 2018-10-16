@@ -2,13 +2,10 @@
 # define LIBFT_MALLOC_H
 
 # include <stdlib.h>
+# include <pthread.h>
 
-// mutex
-#include <pthread.h>
-
-# define TINY 4096 //1024
-# define SMALL 8192 //2048
-#define DEBUG 0
+# define TINY 4096
+# define SMALL 5120
 
 typedef struct			s_block
 {
@@ -47,5 +44,4 @@ void					*ft_memcpy(void *s1, const void *s2, size_t n);
 void					ft_bzero(void *s, size_t n);
 void					*ft_memset(void *b, int c, size_t len);
 
-#endif // LIBFT_MALLOC_H
-
+#endif
