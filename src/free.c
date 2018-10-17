@@ -17,6 +17,15 @@ void			stack_free_block(t_block *curr)
 	}
 }
 
+void			free_large(t_block **large)
+{
+	if ((*large)->next)
+		(*large)->next->prev = (*large)->prev;
+	if ((*large)->prev)
+		(*large)->prev->next = (*large)->next;
+	munmap((*large), (*large)->size + sizeof(t_block));
+}
+
 void			free(void *ptr)
 {
 	t_block		*tmp;
@@ -36,13 +45,7 @@ void			free(void *ptr)
 	tmp->is_free = 1;
 	ptr = NULL;
 	if (tmp->size > SMALL)
-	{
-		if (tmp->next)
-			tmp->next->prev = tmp->prev;
-		if (tmp->prev)
-			tmp->prev->next = tmp->next;
-		munmap(tmp, tmp->size + sizeof(t_block));
-	}
+		free_large(&tmp);
 	else
 		stack_free_block(tmp);
 	pthread_mutex_unlock(&g_mutex);
