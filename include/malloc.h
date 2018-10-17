@@ -5,7 +5,7 @@
 # include <pthread.h>
 
 # define TINY 4096
-# define SMALL 5120
+# define SMALL 8192
 
 typedef struct			s_block
 {
