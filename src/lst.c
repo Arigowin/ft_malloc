@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lst.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:24 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:24 by dolewski         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "malloc.h"
 #include <sys/types.h>
 #include <sys/mman.h>
@@ -19,6 +7,7 @@ t_alloc			*g_alloc = NULL;
 
 void			init_tiny(int tny)
 {
+	/* g_alloc->tiny = (t_block *)(g_alloc + 8); */
 	g_alloc->tiny = (t_block *)(g_alloc + 1);
 	g_alloc->tiny->size = tny - sizeof(t_block);
 	g_alloc->tiny->next = NULL;
@@ -55,6 +44,8 @@ t_alloc			*get_alloc(void)
 	sml = 0;
 	if (g_alloc == NULL)
 	{
+		if (DEBUG)
+			ft_putendl_fd("new_alloc", 2);
 		tny = ((((TINY + sizeof(t_block)) * 100) / getpagesize()) + 1)
 			* getpagesize() + sizeof(t_block);
 		sml = ((((SMALL + sizeof(t_block)) * 100) / getpagesize()) + 1)
@@ -62,6 +53,7 @@ t_alloc			*get_alloc(void)
 		if (MAP_FAILED == (g_alloc = mmap(NULL,
 						tny
 						+ sml
+						/* + sizeof(t_alloc) + 8, */
 						+ sizeof(t_alloc),
 						PROT_READ | PROT_WRITE,
 						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
@@ -98,5 +90,16 @@ t_block			*search_addr(void *addr)
 			return (tmp);
 		tmp = tmp->next;
 	}
+	if (DEBUG)
+		ft_putendl_fd("search_addr not found", 2);
 	return (NULL);
+}
+
+size_t			align_page_size(size_t size, size_t mul)
+{
+	if (size % mul != 0)
+	{
+		return ((((size - 1) / mul) * mul) + mul);
+	}
+	return (size);
 }

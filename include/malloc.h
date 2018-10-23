@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:25 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:25 by dolewski         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef LIBFT_MALLOC_H
 # define LIBFT_MALLOC_H
 
@@ -18,6 +6,8 @@
 
 # define TINY 4096
 # define SMALL 8192
+
+#define DEBUG 1
 
 typedef struct			s_block
 {
@@ -41,16 +31,18 @@ void					*malloc(size_t size);
 void					free(void *ptr);
 void					*realloc(void *ptr, size_t size);
 void					show_alloc_mem();
+void					*calloc(size_t count, size_t size);
 
 t_alloc					*get_alloc(void);
 t_block					*search_addr(void *ptr);
+size_t					align_page_size(size_t size, size_t mul);
 
-void					ft_putchar(char c);
-void					ft_putendl(char const *s);
-void					ft_puthex(const void *ptr);
-void					ft_putstr(const char *s);
-void					ft_putnbrendl(int n);
-void					ft_putnbr(int n);
+void					ft_putchar_fd(char c, int fd);
+void					ft_putendl_fd(char const *s, int fd);
+void					ft_puthex_fd(const void *ptr, int fd);
+void					ft_putstr_fd(const char *s, int fd);
+void					ft_putnbrendl_fd(int n, int fd);
+void					ft_putnbr_fd(int n, int fd);
 int						ft_strlen(const char *s);
 void					*ft_memcpy(void *s1, const void *s2, size_t n);
 void					ft_bzero(void *s, size_t n);

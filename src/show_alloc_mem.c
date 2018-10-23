@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:25 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:25 by dolewski         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "malloc.h"
 #include <pthread.h>
 
@@ -24,12 +12,12 @@ int				show_alloc(t_block *curr)
 	{
 		if (!curr->is_free)
 		{
-			ft_puthex((void *)(curr + 1));
-			ft_putstr(" - ");
-			ft_puthex((void *)((void *)(curr + 1) + curr->size));
-			ft_putstr(" : ");
-			ft_putnbr(curr->size);
-			ft_putendl(" octets");
+			ft_puthex_fd((void *)(curr + 1), 2);
+			ft_putstr_fd(" - ", 2);
+			ft_puthex_fd((void *)((void *)(curr + 1) + curr->size), 2);
+			ft_putstr_fd(" : ", 2);
+			ft_putnbr_fd(curr->size, 2);
+			ft_putendl_fd(" octets", 2);
 			total += curr->size;
 		}
 		curr = curr->next;
@@ -42,20 +30,20 @@ void			show_alloc_mem(void)
 	int total;
 
 	pthread_mutex_lock(&g_mutex);
-	ft_putstr("TINY : ");
-	ft_puthex(get_alloc()->tiny);
-	ft_putendl("");
+	ft_putstr_fd("TINY : ", 2);
+	ft_puthex_fd(get_alloc()->tiny, 2);
+	ft_putendl_fd("", 2);
 	total = show_alloc(get_alloc()->tiny);
-	ft_putstr("SMALL : ");
-	ft_puthex(get_alloc()->small);
-	ft_putendl("");
+	ft_putstr_fd("SMALL : ", 2);
+	ft_puthex_fd(get_alloc()->small, 2);
+	ft_putendl_fd("", 2);
 	total += show_alloc(get_alloc()->small);
-	ft_putstr("LARGE : ");
-	ft_puthex(get_alloc()->large);
-	ft_putendl("");
+	ft_putstr_fd("LARGE : ", 2);
+	ft_puthex_fd(get_alloc()->large, 2);
+	ft_putendl_fd("", 2);
 	total += show_alloc(get_alloc()->large);
-	ft_putstr("Total : ");
-	ft_putnbr(total);
-	ft_putendl(" octets");
+	ft_putstr_fd("Total : ", 2);
+	ft_putnbr_fd(total, 2);
+	ft_putendl_fd(" octets", 2);
 	pthread_mutex_unlock(&g_mutex);
 }

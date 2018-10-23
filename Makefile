@@ -26,13 +26,14 @@ SRC = malloc.c \
 	  free.c \
 	  realloc.c \
 	  show_alloc_mem.c \
+	  calloc.c \
 	  lst.c \
-	  ft_putchar.c \
-	  ft_putendl.c \
-	  ft_puthex.c \
-	  ft_putstr.c \
-	  ft_putnbrendl.c \
-	  ft_putnbr.c \
+	  ft_putchar_fd.c \
+	  ft_putendl_fd.c \
+	  ft_puthex_fd.c \
+	  ft_putstr_fd.c \
+	  ft_putnbrendl_fd.c \
+	  ft_putnbr_fd.c \
 	  ft_strlen.c \
 	  ft_bzero.c \
 	  ft_memcpy.c \

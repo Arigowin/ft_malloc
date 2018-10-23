@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:20 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:20 by dolewski         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "malloc.h"
 #include <sys/types.h>
 #include <sys/mman.h>
@@ -20,6 +8,8 @@ pthread_mutex_t	g_mutex;
 
 void			stack_free_block(t_block *curr)
 {
+	if (DEBUG)
+		ft_putendl_fd("stack_free", 2);
 	if (curr->next != NULL && curr->next->is_free)
 	{
 		curr->size += curr->next->size + sizeof(t_block);
@@ -31,6 +21,8 @@ void			stack_free_block(t_block *curr)
 
 void			free_large(t_block **large)
 {
+	if (DEBUG)
+		ft_putendl_fd("free_large", 2);
 	if ((*large)->next)
 		(*large)->next->prev = (*large)->prev;
 	if ((*large)->prev)
@@ -40,17 +32,45 @@ void			free_large(t_block **large)
 
 void			free(void *ptr)
 {
+	if (DEBUG)
+	{
+		ft_putstr_fd("--- Start free ", 2);
+		ft_puthex_fd(ptr, 2);
+		ft_putchar_fd('\n', 2);
+	}
 	t_block		*tmp;
 
 	pthread_mutex_lock(&g_mutex);
 	if (ptr == NULL)
 	{
+		if (DEBUG)
+			ft_putendl_fd("*** END1 free NULL", 2);
 		pthread_mutex_unlock(&g_mutex);
+		/* if (DEBUG) */
+		/*     show_alloc_mem(); */
 		return ;
 	}
 	tmp = (t_block *)(ptr - sizeof(t_block));
+	/* if (search_addr(tmp) == NULL) */
+	/* { */
+	/*     [> munmap(ptr, ft_strlen(ptr)); <] */
+	/*     if (DEBUG) */
+	/*     { */
+	/*         ft_puthex_fd(ptr, 2); */
+	/*         ft_putchar_fd(' ', 2); */
+	/*         ft_putnbr_fd(ft_strlen(ptr), 2); */
+	/*         ft_putendl_fd(" *** END2 free", 2); */
+	/*     } */
+	/*     pthread_mutex_unlock(&g_mutex); */
+	/*     return ; */
+	/* } */
 	if (search_addr(tmp) == NULL || tmp->is_free == 1)
 	{
+		if (DEBUG)
+		{
+			ft_puthex_fd(ptr, 2);
+			ft_putendl_fd(" *** END3 free", 2);
+		}
 		pthread_mutex_unlock(&g_mutex);
 		return ;
 	}
@@ -60,5 +80,7 @@ void			free(void *ptr)
 		free_large(&tmp);
 	else
 		stack_free_block(tmp);
+	if (DEBUG)
+		ft_putendl_fd("*** END free", 2);
 	pthread_mutex_unlock(&g_mutex);
 }
