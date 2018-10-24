@@ -1,8 +1,4 @@
 #include "malloc.h"
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <stdio.h>
-#include <stdint.h>
 #include <pthread.h>
 
 pthread_mutex_t	g_mutex;

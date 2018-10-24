@@ -1,5 +1,4 @@
 #include "malloc.h"
-#include <sys/types.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -7,8 +6,7 @@ t_alloc			*g_alloc = NULL;
 
 void			init_tiny(int tny)
 {
-	/* g_alloc->tiny = (t_block *)(g_alloc + 8); */
-	g_alloc->tiny = (t_block *)(g_alloc + 1);
+	g_alloc->tiny = (t_block *)(g_alloc + 8);
 	g_alloc->tiny->size = tny - sizeof(t_block);
 	g_alloc->tiny->next = NULL;
 	g_alloc->tiny->prev = NULL;
@@ -53,8 +51,7 @@ t_alloc			*get_alloc(void)
 		if (MAP_FAILED == (g_alloc = mmap(NULL,
 						tny
 						+ sml
-						/* + sizeof(t_alloc) + 8, */
-						+ sizeof(t_alloc),
+						+ sizeof(t_alloc) + 8,
 						PROT_READ | PROT_WRITE,
 						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 			return (NULL);
@@ -73,21 +70,33 @@ t_block			*search_addr(void *addr)
 	while (tmp != NULL)
 	{
 		if (addr == tmp)
+		{
+	if (DEBUG)
+		ft_putendl_fd("search_addr found TINY", 2);
 			return (tmp);
+		}
 		tmp = tmp->next;
 	}
 	tmp = get_alloc()->small;
 	while (tmp != NULL)
 	{
 		if (addr == tmp)
+		{
+	if (DEBUG)
+		ft_putendl_fd("search_addr found SMALL", 2);
 			return (tmp);
+		}
 		tmp = tmp->next;
 	}
 	tmp = get_alloc()->large;
 	while (tmp != NULL)
 	{
 		if (addr == tmp)
+		{
+	if (DEBUG)
+		ft_putendl_fd("search_addr found LARGE", 2);
 			return (tmp);
+		}
 		tmp = tmp->next;
 	}
 	if (DEBUG)

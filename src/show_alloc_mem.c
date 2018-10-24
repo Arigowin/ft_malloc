@@ -10,16 +10,27 @@ int				show_alloc(t_block *curr)
 	total = 0;
 	while (curr != NULL)
 	{
-		if (!curr->is_free)
-		{
+		/* if (!curr->is_free) */
+		/* { */
+			if (DEBUG)
+			{
+				ft_puthex_fd((void *)(curr), 2);
+				ft_putstr_fd(" - ", 2);
+			}
 			ft_puthex_fd((void *)(curr + 1), 2);
 			ft_putstr_fd(" - ", 2);
 			ft_puthex_fd((void *)((void *)(curr + 1) + curr->size), 2);
 			ft_putstr_fd(" : ", 2);
 			ft_putnbr_fd(curr->size, 2);
-			ft_putendl_fd(" octets", 2);
+			if (DEBUG)
+			{
+				ft_putstr_fd(" octets free: ", 2);
+				ft_putnbrendl_fd(curr->is_free, 2);
+			}
+			else
+				ft_putendl_fd(" octets", 2);
 			total += curr->size;
-		}
+		/* } */
 		curr = curr->next;
 	}
 	return (total);

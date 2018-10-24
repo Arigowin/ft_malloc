@@ -26,7 +26,6 @@ SRC = malloc.c \
 	  free.c \
 	  realloc.c \
 	  show_alloc_mem.c \
-	  calloc.c \
 	  lst.c \
 	  ft_putchar_fd.c \
 	  ft_putendl_fd.c \
@@ -37,7 +36,8 @@ SRC = malloc.c \
 	  ft_strlen.c \
 	  ft_bzero.c \
 	  ft_memcpy.c \
-	  ft_memset.c
+	  ft_memset.c \
+	  calloc.c
 
 
 .PHONY: all clean fclean re test

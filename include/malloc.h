@@ -1,7 +1,6 @@
 #ifndef LIBFT_MALLOC_H
 # define LIBFT_MALLOC_H
 
-# include <stdlib.h>
 # include <pthread.h>
 
 # define TINY 4096
