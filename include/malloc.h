@@ -34,6 +34,7 @@ void					*calloc(size_t count, size_t size);
 
 t_alloc					*get_alloc(void);
 t_block					*search_addr(void *ptr);
+int						is_large(void *addr);
 size_t					align_page_size(size_t size, size_t mul);
 
 void					ft_putchar_fd(char c, int fd);

@@ -143,7 +143,7 @@ void			*malloc(size_t size)
 
 	pthread_mutex_lock(&g_mutex);
 	ret = NULL;
-	if (size <= 0)
+	if (size == 0)
 	{
 		if (DEBUG)
 			ft_putendl_fd("*** END1 Malloc", 2);
@@ -167,6 +167,8 @@ void			*malloc(size_t size)
 		ret = add_large_block(size);
 	if (DEBUG)
 	{
+		ft_puthex_fd((ret - sizeof(t_block)), 2);
+		ft_putchar_fd('\n', 2);
 		ft_puthex_fd(ret, 2);
 		ft_putendl_fd(" *** END Malloc", 2);
 	}

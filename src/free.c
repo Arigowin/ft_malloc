@@ -48,7 +48,7 @@ void			stack_free_block(t_block *curr)
 			ft_putnbrendl_fd(curr->next->next->is_free, 2);
 		}
 	}
-	if (curr->next != NULL && curr->next->is_free)
+	if (curr != NULL && curr->is_free && curr->next != NULL && curr->next->is_free)
 	{
 		curr->size = curr->size + (curr->next->size + sizeof(t_block));
 		if (curr->next->next != NULL)
@@ -115,19 +115,6 @@ void			free(void *ptr)
 		return ;
 	}
 	tmp = (t_block *)(ptr - sizeof(t_block));
-	/* if (search_addr(tmp) == NULL) */
-	/* { */
-	/*     munmap(ptr, ft_strlen(ptr)); */
-	/*     if (DEBUG) */
-	/*     { */
-	/*         ft_puthex_fd(ptr, 2); */
-	/*         ft_putchar_fd(' ', 2); */
-	/*         ft_putnbr_fd(ft_strlen(ptr), 2); */
-	/*         ft_putendl_fd(" *** END2 free", 2); */
-	/*     } */
-	/*     pthread_mutex_unlock(&g_mutex); */
-	/*     return ; */
-	/* } */
 	if (search_addr(tmp) == NULL || tmp->is_free == 1)
 	{
 		if (DEBUG)
@@ -142,10 +129,10 @@ void			free(void *ptr)
 	}
 	tmp->is_free = 1;
 	ptr = NULL;
-	if (tmp->size > SMALL)
+	if (is_large(tmp))
 		free_large(&tmp);
-	/* else */
-	/*     stack_free_block(tmp); */
+	else
+		stack_free_block(tmp);
 	if (DEBUG)
 	{
 		ft_puthex_fd(tmp, 2);
