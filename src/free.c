@@ -4,84 +4,61 @@
 
 pthread_mutex_t	g_mutex;
 
-void			stack_free_block(t_block *curr)
+void			stack_block(t_block *curr)
 {
 	if (DEBUG)
-		ft_putendl_fd("stack_free", 2);
+		ft_putendl_fd("stack_block", 2);
+
+	curr->size = curr->size + (curr->next->size + sizeof(t_block));
+	if (curr->next->next != NULL)
+		curr->next->next->prev = curr;
+	curr->next = curr->next->next;
+}
+
+void			stack_free_block(void)
+{
+	if (DEBUG)
+		ft_putendl_fd("stack_free_block", 2);
+
 	if (DEBUG)
 	{
-		ft_putstr_fd("curr -> ", 2);
-		ft_puthex_fd((void *)(curr), 2);
-		ft_putstr_fd(" - ", 2);
-		ft_puthex_fd((void *)(curr + 1), 2);
-		ft_putstr_fd(" - ", 2);
-		ft_puthex_fd((void *)((void *)(curr + 1) + curr->size), 2);
-		ft_putstr_fd(" : ", 2);
-		ft_putnbr_fd(curr->size, 2);
-		ft_putstr_fd(" octets free: ", 2);
-		ft_putnbrendl_fd(curr->is_free, 2);
-
-		if (curr->next != NULL)
-		{
-			ft_putstr_fd("next -> ", 2);
-			ft_puthex_fd((void *)(curr->next), 2);
-			ft_putstr_fd(" - ", 2);
-			ft_puthex_fd((void *)(curr->next + 1), 2);
-			ft_putstr_fd(" - ", 2);
-			ft_puthex_fd((void *)((void *)(curr->next + 1) + curr->next->size), 2);
-			ft_putstr_fd(" : ", 2);
-			ft_putnbr_fd(curr->next->size, 2);
-			ft_putstr_fd(" octets free: ", 2);
-			ft_putnbrendl_fd(curr->next->is_free, 2);
-		}
-		if (curr->next->next != NULL)
-		{
-			ft_putstr_fd("next->next -> ", 2);
-			ft_puthex_fd((void *)(curr->next->next), 2);
-			ft_putstr_fd(" - ", 2);
-			ft_puthex_fd((void *)(curr->next->next + 1), 2);
-			ft_putstr_fd(" - ", 2);
-			ft_puthex_fd((void *)((void *)(curr->next->next + 1) + curr->next->next->size), 2);
-			ft_putstr_fd(" : ", 2);
-			ft_putnbr_fd(curr->next->next->size, 2);
-			ft_putstr_fd(" octets free: ", 2);
-			ft_putnbrendl_fd(curr->next->next->is_free, 2);
-		}
+		pthread_mutex_unlock(&g_mutex);
+		show_alloc_mem();
+		pthread_mutex_lock(&g_mutex);
 	}
-	if (curr != NULL && curr->is_free && curr->next != NULL && curr->next->is_free)
-	{
-		curr->size = curr->size + (curr->next->size + sizeof(t_block));
-		if (curr->next->next != NULL)
-			curr->next->next->prev = curr;
-		curr->next = curr->next->next;
-		if (DEBUG)
-		{
-			ft_putendl_fd("BONJOUR", 2);
-			ft_putstr_fd("curr -> ", 2);
-			ft_puthex_fd((void *)(curr), 2);
-			ft_putstr_fd(" - ", 2);
-			ft_puthex_fd((void *)(curr + 1), 2);
-			ft_putstr_fd(" - ", 2);
-			ft_puthex_fd((void *)((void *)(curr + 1) + curr->size), 2);
-			ft_putstr_fd(" : ", 2);
-			ft_putnbr_fd(curr->size, 2);
-			ft_putstr_fd(" octets free: ", 2);
-			ft_putnbrendl_fd(curr->is_free, 2);
+	t_block *tmp;
 
-			if (curr->next != NULL)
-			{
-				ft_putstr_fd("next -> ", 2);
-				ft_puthex_fd((void *)(curr->next), 2);
-				ft_putstr_fd(" - ", 2);
-				ft_puthex_fd((void *)(curr->next + 1), 2);
-				ft_putstr_fd(" - ", 2);
-				ft_puthex_fd((void *)((void *)(curr->next + 1) + curr->next->size), 2);
-				ft_putstr_fd(" : ", 2);
-				ft_putnbr_fd(curr->next->size, 2);
-				ft_putstr_fd(" octets free: ", 2);
-				ft_putnbrendl_fd(curr->next->is_free, 2);
-			}
+	tmp = get_alloc()->tiny;
+	if (DEBUG)
+		ft_putendl_fd("TINY", 2);
+	while (tmp->next != NULL)
+	{
+		if (tmp->is_free && tmp->next->is_free)
+		{
+			stack_block(tmp);
+			if (tmp->next == NULL)
+				break;
 		}
+		tmp = tmp->next;
+	}
+	tmp = get_alloc()->small;
+	if (DEBUG)
+		ft_putendl_fd("SMALL", 2);
+	while (tmp->next != NULL)
+	{
+		if (tmp->is_free && tmp->next->is_free)
+		{
+			stack_block(tmp);
+			if (tmp->next == NULL)
+				break;
+		}
+		tmp = tmp->next;
+	}
+	if (DEBUG)
+	{
+		pthread_mutex_unlock(&g_mutex);
+		show_alloc_mem();
+		pthread_mutex_lock(&g_mutex);
 	}
 }
 
@@ -132,7 +109,7 @@ void			free(void *ptr)
 	if (is_large(tmp))
 		free_large(&tmp);
 	else
-		stack_free_block(tmp);
+		stack_free_block();
 	if (DEBUG)
 	{
 		ft_puthex_fd(tmp, 2);

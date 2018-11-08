@@ -6,7 +6,7 @@
 # define TINY 4096
 # define SMALL 8192
 
-#define DEBUG 1
+#define DEBUG 0
 
 typedef struct			s_block
 {
@@ -47,5 +47,7 @@ int						ft_strlen(const char *s);
 void					*ft_memcpy(void *s1, const void *s2, size_t n);
 void					ft_bzero(void *s, size_t n);
 void					*ft_memset(void *b, int c, size_t len);
+int						ft_strcmp(const char *s1, const char *s2);
+void					ft_address(const void *ptr, char (*res)[9]);
 
 #endif

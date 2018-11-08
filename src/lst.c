@@ -65,11 +65,15 @@ t_alloc			*get_alloc(void)
 t_block			*search_addr(void *addr)
 {
 	t_block		*tmp;
+	char		buff[9];
+	char		buff_addr[9];
 
+	ft_address(addr, &buff_addr);
 	tmp = get_alloc()->tiny;
 	while (tmp != NULL)
 	{
-		if (addr == tmp)
+		ft_address(tmp, &buff);
+		if (ft_strcmp(buff_addr, buff) == 0)
 		{
 			if (DEBUG)
 				ft_putendl_fd("search_addr found TINY", 2);
@@ -80,7 +84,8 @@ t_block			*search_addr(void *addr)
 	tmp = get_alloc()->small;
 	while (tmp != NULL)
 	{
-		if (addr == tmp)
+		ft_address(tmp, &buff);
+		if (ft_strcmp(buff_addr, buff) == 0)
 		{
 			if (DEBUG)
 				ft_putendl_fd("search_addr found SMALL", 2);
@@ -91,7 +96,8 @@ t_block			*search_addr(void *addr)
 	tmp = get_alloc()->large;
 	while (tmp != NULL)
 	{
-		if (addr == tmp)
+		ft_address(tmp, &buff);
+		if (ft_strcmp(buff_addr, buff) == 0)
 		{
 			if (DEBUG)
 				ft_putendl_fd("search_addr found LARGE", 2);

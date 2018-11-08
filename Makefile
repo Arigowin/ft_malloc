@@ -37,6 +37,8 @@ SRC = malloc.c \
 	  ft_bzero.c \
 	  ft_memcpy.c \
 	  ft_memset.c \
+	  ft_strcmp.c \
+	  ft_address.c \
 	  calloc.c
 
 
