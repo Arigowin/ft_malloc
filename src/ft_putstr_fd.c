@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:24 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:24 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:49 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:49 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "malloc.h"
 
-void	ft_putstr(const char *s)
+void	ft_putstr_fd(const char *s, int fd)
 {
 	if (s != NULL)
-		write(1, s, ft_strlen(s));
+		write(fd, s, ft_strlen(s));
 }

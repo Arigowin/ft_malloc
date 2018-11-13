@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst.c                                              :+:      :+:    :+:   */
+/*   alloc.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:24 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:24 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:47 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:47 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <sys/types.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -19,7 +18,7 @@ t_alloc			*g_alloc = NULL;
 
 void			init_tiny(int tny)
 {
-	g_alloc->tiny = (t_block *)(g_alloc + 1);
+	g_alloc->tiny = (t_block *)(g_alloc + 8);
 	g_alloc->tiny->size = tny - sizeof(t_block);
 	g_alloc->tiny->next = NULL;
 	g_alloc->tiny->prev = NULL;
@@ -62,7 +61,7 @@ t_alloc			*get_alloc(void)
 		if (MAP_FAILED == (g_alloc = mmap(NULL,
 						tny
 						+ sml
-						+ sizeof(t_alloc),
+						+ sizeof(t_alloc) + 8,
 						PROT_READ | PROT_WRITE,
 						MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 			return (NULL);
@@ -71,32 +70,4 @@ t_alloc			*get_alloc(void)
 		init_large();
 	}
 	return (g_alloc);
-}
-
-t_block			*search_addr(void *addr)
-{
-	t_block		*tmp;
-
-	tmp = get_alloc()->tiny;
-	while (tmp != NULL)
-	{
-		if (addr == tmp)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	tmp = get_alloc()->small;
-	while (tmp != NULL)
-	{
-		if (addr == tmp)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	tmp = get_alloc()->large;
-	while (tmp != NULL)
-	{
-		if (addr == tmp)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	return (NULL);
 }

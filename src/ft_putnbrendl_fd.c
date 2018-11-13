@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl.c                                       :+:      :+:    :+:   */
+/*   ft_putnbrendl_fd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:22 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:22 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:49 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:49 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	ft_putendl(char const *s)
+static void		ft_putunbr(unsigned int n, int fd)
 {
-	ft_putstr(s);
-	ft_putchar('\n');
+	if (n > 9)
+		ft_putunbr(n / 10, fd);
+	ft_putchar_fd((n % 10) + '0', fd);
+}
+
+void			ft_putnbrendl_fd(int n, int fd)
+{
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		ft_putunbr(-n, fd);
+	}
+	else
+		ft_putunbr(n, fd);
+	ft_putchar_fd('\n', fd);
 }

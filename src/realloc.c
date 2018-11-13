@@ -5,16 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:25 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:25 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:49 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:49 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <stdio.h>
-#include <stdint.h>
 #include <pthread.h>
 
 pthread_mutex_t	g_mutex;

@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:24 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:24 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:49 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:49 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <sys/types.h>
 #include <sys/mman.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -25,7 +24,8 @@ t_block			*find_first_free(size_t size, t_block *head)
 	tmp = head;
 	while (tmp->next != NULL)
 	{
-		if (tmp->is_free && tmp->size >= size + sizeof(t_block))
+		if (tmp->is_free && (tmp->size == size
+					|| tmp->size >= (size + sizeof(t_block) + 1)))
 			return (tmp);
 		tmp = tmp->next;
 	}
@@ -39,15 +39,13 @@ void			*add_block(size_t size, t_block *head)
 
 	curr = find_first_free(size, head);
 	next = curr->next;
-	if ((long)(curr->size - size - sizeof(t_block)) >= 0)
+	if (curr->size != size && (long)(curr->size - size - sizeof(t_block)) > 0)
 	{
 		curr->next = (void *)((void *)(curr + 1) + size);
 		curr->next->size = curr->size - size - sizeof(t_block);
 		curr->next->is_free = 1;
 		curr->next->next = next;
 		curr->next->prev = curr;
-		if (curr->prev != NULL)
-			curr->prev->next = curr;
 	}
 	else if (curr->next == NULL)
 		return (NULL);
@@ -63,7 +61,8 @@ void			*add_large_block(size_t size)
 	tmp = get_alloc()->large;
 	while (tmp->next != NULL)
 		tmp = tmp->next;
-	if (MAP_FAILED == (tmp->next = mmap(NULL, size + sizeof(t_block),
+	if (MAP_FAILED == (tmp->next = mmap(NULL,
+					align_page_size(size + sizeof(t_block), getpagesize()),
 					PROT_READ | PROT_WRITE,
 					MAP_ANONYMOUS | MAP_PRIVATE, -1, 0)))
 		return (NULL);
@@ -80,15 +79,20 @@ void			*malloc(size_t size)
 
 	pthread_mutex_lock(&g_mutex);
 	ret = NULL;
-	if (size <= 0)
+	if (size == 0)
 	{
 		pthread_mutex_unlock(&g_mutex);
 		return (ret);
 	}
+	size = align_page_size(size, 16);
 	if (size <= (size_t)(TINY))
+	{
 		ret = add_block(size, get_alloc()->tiny);
+	}
 	if (ret == NULL && size <= (size_t)(SMALL))
+	{
 		ret = add_block(size, get_alloc()->small);
+	}
 	if (ret == NULL)
 		ret = add_large_block(size);
 	pthread_mutex_unlock(&g_mutex);

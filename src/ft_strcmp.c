@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbrendl.c                                    :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:23 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:23 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:49 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:49 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
-
-static void		ft_putunbr(unsigned int n)
+int				ft_strcmp(const char *s1, const char *s2)
 {
-	if (n > 9)
-		ft_putunbr(n / 10);
-	ft_putchar((n % 10) + '0');
-}
+	const unsigned char		*s_one;
+	const unsigned char		*s_two;
 
-void			ft_putnbrendl(int n)
-{
-	if (n < 0)
+	s_one = (const unsigned char*)s1;
+	s_two = (const unsigned char*)s2;
+	while (*s_one == *s_two && *s_one != '\0')
 	{
-		ft_putchar('-');
-		ft_putunbr(-n);
+		s_one++;
+		s_two++;
 	}
-	else
-		ft_putunbr(n);
-	ft_putchar('\n');
+	return (*s_one - *s_two);
 }

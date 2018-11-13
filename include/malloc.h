@@ -5,15 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:25:25 by dolewski          #+#    #+#             */
-/*   Updated: 2018/10/17 17:25:25 by dolewski         ###   ########.fr       */
+/*   Created: 2018/11/13 04:02:50 by dolewski          #+#    #+#             */
+/*   Updated: 2018/11/13 04:02:50 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_MALLOC_H
 # define LIBFT_MALLOC_H
 
-# include <stdlib.h>
 # include <pthread.h>
 
 # define TINY 4096
@@ -41,19 +40,24 @@ void					*malloc(size_t size);
 void					free(void *ptr);
 void					*realloc(void *ptr, size_t size);
 void					show_alloc_mem();
+void					*calloc(size_t count, size_t size);
 
 t_alloc					*get_alloc(void);
 t_block					*search_addr(void *ptr);
+int						is_large(void *addr);
+size_t					align_page_size(size_t size, size_t mul);
 
-void					ft_putchar(char c);
-void					ft_putendl(char const *s);
-void					ft_puthex(const void *ptr);
-void					ft_putstr(const char *s);
-void					ft_putnbrendl(int n);
-void					ft_putnbr(int n);
+void					ft_putchar_fd(char c, int fd);
+void					ft_putendl_fd(char const *s, int fd);
+void					ft_puthex_fd(const void *ptr, int fd);
+void					ft_putstr_fd(const char *s, int fd);
+void					ft_putnbrendl_fd(int n, int fd);
+void					ft_putnbr_fd(int n, int fd);
 int						ft_strlen(const char *s);
 void					*ft_memcpy(void *s1, const void *s2, size_t n);
 void					ft_bzero(void *s, size_t n);
 void					*ft_memset(void *b, int c, size_t len);
+int						ft_strcmp(const char *s1, const char *s2);
+void					ft_address(const void *ptr, char (*res)[9]);
 
 #endif
