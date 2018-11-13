@@ -25,8 +25,10 @@ CFLAGS = -Wall -Wextra -Werror -I $(HPATH) -fPIC -g
 SRC = malloc.c \
 	  free.c \
 	  realloc.c \
+	  calloc.c \
 	  show_alloc_mem.c \
-	  lst.c \
+	  alloc.c \
+	  utils.c \
 	  ft_putchar_fd.c \
 	  ft_putendl_fd.c \
 	  ft_puthex_fd.c \
@@ -38,8 +40,7 @@ SRC = malloc.c \
 	  ft_memcpy.c \
 	  ft_memset.c \
 	  ft_strcmp.c \
-	  ft_address.c \
-	  calloc.c
+	  ft_address.c
 
 
 .PHONY: all clean fclean re test

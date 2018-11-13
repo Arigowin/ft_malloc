@@ -6,8 +6,6 @@
 # define TINY 4096
 # define SMALL 8192
 
-#define DEBUG 0
-
 typedef struct			s_block
 {
 	size_t				size;

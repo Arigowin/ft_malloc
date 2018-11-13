@@ -42,8 +42,6 @@ t_alloc			*get_alloc(void)
 	sml = 0;
 	if (g_alloc == NULL)
 	{
-		if (DEBUG)
-			ft_putendl_fd("new_alloc", 2);
 		tny = ((((TINY + sizeof(t_block)) * 100) / getpagesize()) + 1)
 			* getpagesize() + sizeof(t_block);
 		sml = ((((SMALL + sizeof(t_block)) * 100) / getpagesize()) + 1)
@@ -60,81 +58,4 @@ t_alloc			*get_alloc(void)
 		init_large();
 	}
 	return (g_alloc);
-}
-
-t_block			*search_addr(void *addr)
-{
-	t_block		*tmp;
-	char		buff[9];
-	char		buff_addr[9];
-
-	ft_address(addr, &buff_addr);
-	tmp = get_alloc()->tiny;
-	while (tmp != NULL)
-	{
-		ft_address(tmp, &buff);
-		if (ft_strcmp(buff_addr, buff) == 0)
-		{
-			if (DEBUG)
-				ft_putendl_fd("search_addr found TINY", 2);
-			return (tmp);
-		}
-		tmp = tmp->next;
-	}
-	tmp = get_alloc()->small;
-	while (tmp != NULL)
-	{
-		ft_address(tmp, &buff);
-		if (ft_strcmp(buff_addr, buff) == 0)
-		{
-			if (DEBUG)
-				ft_putendl_fd("search_addr found SMALL", 2);
-			return (tmp);
-		}
-		tmp = tmp->next;
-	}
-	tmp = get_alloc()->large;
-	while (tmp != NULL)
-	{
-		ft_address(tmp, &buff);
-		if (ft_strcmp(buff_addr, buff) == 0)
-		{
-			if (DEBUG)
-				ft_putendl_fd("search_addr found LARGE", 2);
-			return (tmp);
-		}
-		tmp = tmp->next;
-	}
-	if (DEBUG)
-		ft_putendl_fd("search_addr not found", 2);
-	return (NULL);
-}
-
-int				is_large(void *addr)
-{
-	t_block		*tmp;
-
-	tmp = get_alloc()->large;
-	while (tmp != NULL)
-	{
-		if (addr == tmp)
-		{
-			if (DEBUG)
-				ft_putendl_fd("is_large TRUE", 2);
-			return (1);
-		}
-		tmp = tmp->next;
-	}
-	if (DEBUG)
-		ft_putendl_fd("is_large FALSE", 2);
-	return 0;
-}
-
-size_t			align_page_size(size_t size, size_t mul)
-{
-	if (size % mul != 0)
-	{
-		return ((((size - 1) / mul) * mul) + mul);
-	}
-	return (size);
 }
